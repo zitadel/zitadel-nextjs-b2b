@@ -1,0 +1,27 @@
+{
+  "name": "Bringmos Südtiroler Bestellplattform",
+  "short_name": "Bringmos",
+  "theme_color": "#cd5c5c",
+  "background_color": "#333",
+  "display": "standalone",
+  "gcm_sender_id": "103953800507",
+  "scope": "/",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "icons/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}

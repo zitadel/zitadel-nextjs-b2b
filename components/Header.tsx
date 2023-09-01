@@ -14,7 +14,7 @@ export default function Header() {
             </span>
           </h1>
           <p className="text-lg opacity-80 dark:opacity-80 mb-8">
-            ZITADEL - The best of Auth0 and Keycloak combined. Built for the serverless era.
+            ZITADEL - Identity infrastructure, simplified for you.
           </p>
         </div>
       </div>

@@ -130,13 +130,13 @@ Let's call this new organization `Demo-Customer`.
 
 ### Users
 
-Now switch back to the organization `Demo-Customer` and [create a new user](https://docs.zitadel.com/docs/manuals/user-register) in this organization.
+Now switch back to the organization `Demo-Customer` and [create a new user](https://zitadel.com/docs/guides/manage/user/reg-create-user) in this organization.
 Let's call the first user `Alice Admin`. Create a second user called `Eric Employee`.
 
 ### Manager Role
 
 We want to enable Alice to assign roles to users in her organization in a self-service manner.
-To make this happen, we need give Alice an [Manager Role](https://docs.zitadel.com/docs/concepts/structure/managers) within the Organization `Demo-Customer`.
+To make this happen, we need give Alice an [Manager Role](https://zitadel.com/docs/concepts/structure/managers) within the Organization `Demo-Customer`.
 
 Still in the organization `Demo-Customer`, navigate to Organization. Click on the plus on the top right and give `Alice Admin` the Manager Role `Org Owner`.
 
@@ -147,7 +147,7 @@ Login with your user on the customer organization to validate the setup.
 ### Organization Grant
 
 Switch to the `Demo-Vendor` organization, select Projects in the navigation, and click on `Portal` and then `Grants`.
-[Grant all roles of the Project](https://docs.zitadel.com/docs/guides/basics/projects#exercise---grant-a-project) to the organization `demo-customer.{YourDomain}.zitadel.cloud`.
+[Grant all roles of the Project](https://zitadel.com/docs/guides/manage/console/projects#grant-a-project) to the organization `demo-customer.{YourDomain}.zitadel.cloud`.
 
 ### Authorization
 

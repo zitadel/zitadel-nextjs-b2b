@@ -50,9 +50,9 @@ const Footer = () => {
             <div className="flex-1">
               <p className="text-gray-600 dark:text-gray-300 text-center md:text-left mb-2">
                 <a className="hover:text-pink-600" href="https://zitadel.com">
-                  ZITADEL (CAOS AG)
+                  ZITADEL (CAOS Ltd.)
                 </a>
-                , Teufener Str. 19, 9000 St. Gallen
+                , Lerchenfeldstrasse 3, 9014 St. Gallen, Switzerland
               </p>
               <span className="text-gray-500 md:mr-6">© 2021</span>
             </div>

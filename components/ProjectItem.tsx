@@ -50,7 +50,7 @@ export default function ProjectItem({
       </span>
 
       <span className="text-sm text-left text-gray-500 dark:text-gray-300">
-        roles:{" "}
+        granted roles:{" "}
         {project?.grantedRoleKeys ? project.grantedRoleKeys.join(", ") : ""}
       </span>
 

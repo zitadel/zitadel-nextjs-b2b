@@ -7,7 +7,7 @@ export const ROLES: Role[] = [
     roles: ["reader", "admin"],
   },
   {
-    name: "Authorizations",
+    name: "Manage Team",
     desc: "You need to have admin role to view user grants",
     roles: ["admin"],
   },

@@ -15,22 +15,18 @@ export default NextAuth({
       }
       return token;
     },
-    async session({
-      session,
-      token: {
-        id,
-        sub,
-        user,
-        error: tokenError,
-        accessToken,
-        idToken: idToken,
-      },
-    }) {
+    async session({ session, token: { id, sub, user, error: tokenError, accessToken, idToken } }) {
       session.accessToken = accessToken;
-      session.id = id;
-      session.sub = sub;
-      session.user = user;
-      session.idToken = idToken;
+      session.idToken = idToken as string;
+      session.user = {
+        id: user?.id,
+        email: user?.email,
+        image: user?.image,
+        name: user?.name,
+        loginName: user?.loginName,
+        orgName: user?.organization.name,
+      };
+      session.clientId = process.env.ZITADEL_CLIENT_ID;
       session.error = tokenError;
 
       return session;
@@ -39,10 +35,10 @@ export default NextAuth({
   debug: true,
   providers: [
     {
-      id: "zitadel",
-      name: "zitadel",
-      type: "oauth",
-      version: "2",
+      id: 'zitadel',
+      name: 'zitadel',
+      type: 'oauth',
+      version: '2',
       wellKnown: process.env.NEXT_PUBLIC_ZITADEL_ISSUER,
       authorization: {
         params: {
@@ -50,9 +46,9 @@ export default NextAuth({
         },
       },
       idToken: true,
-      checks: ["pkce", "state"],
+      checks: ['pkce', 'state'],
       client: {
-        token_endpoint_auth_method: "none",
+        token_endpoint_auth_method: 'none',
       },
       async profile(profile) {
         return {
@@ -63,7 +59,12 @@ export default NextAuth({
           email: profile.email,
           loginName: profile.preferred_username,
           image: profile.picture,
-          roles: profile["urn:zitadel:iam:org:project:roles"],
+          roles: profile['urn:zitadel:iam:org:project:roles'],
+          organization: {
+            id: profile['urn:zitadel:iam:user:resourceowner:id'],
+            name: profile['urn:zitadel:iam:user:resourceowner:name'],
+            primaryDomain: profile['urn:zitadel:iam:user:resourceowner:primary_domain'],
+          },
         };
       },
 

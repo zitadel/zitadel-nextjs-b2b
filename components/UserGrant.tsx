@@ -16,7 +16,7 @@ export default function UserGrant() {
   useEffect(() => {
     getSession().then((session) => {
       if (org && roles) {
-        getRolesFromUserInfo(`Bearer ${session.accessToken}`).then((roles) => {
+        fetch(`/api/roles`).then((roles) => {
           const mappedRoles: string[] = Object.keys(roles).map((role) => {
             return roles[role][org.id] ? role : null;
           });

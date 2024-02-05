@@ -12,7 +12,7 @@ export default function ProfileImage({ user }: { user?: any | null }) {
   const fetcher = async (url: string, cb: any) => {
     const session = (await getSession()) as any;
     return fetch(`${url}`, {
-      method: "POST",
+      method: 'POST',
       headers: {
         authorization: `Bearer ${session.accessToken}`,
       },
@@ -27,39 +27,48 @@ export default function ProfileImage({ user }: { user?: any | null }) {
   const { idToken } = session as any;
 
   const logout = async () => {
-    await signOut({ callbackUrl: "/" });
+    await signOut({ callbackUrl: '/' });
     const url =
       `${process.env.NEXT_PUBLIC_ZITADEL_ISSUER}/oidc/v1/end_session?` +
       new URLSearchParams({
         id_token_hint: idToken,
-        post_logout_redirect_uri: "http://localhost:3000",
+        post_logout_redirect_uri: 'http://localhost:3000',
       });
 
     return router.push(url);
   };
 
+  const [isLoading, setIsLoading] = useState(true);
+
+  const getSessions = async () => {
+    try {
+      const response = await fetch('/api/sessions');
+      const data = await response.json();
+      if (data && typeof data === 'object' && data.length) {
+        setSessions(data);
+      }
+    } catch (error) {
+      setSessions([]);
+      console.error(error);
+    }
+    setIsLoading(false);
+  };
+
   const [sessions, setSessions] = useState<any[]>([]);
 
   useEffect(() => {
-    fetcher(
-      `${process.env.ZITADEL_API}/auth/v1/users/me/sessions/_search`,
-      sessionMap
-    ).then((sessions) => {
-      if (sessions && sessions.length) {
-        setSessions(sessions);
-      }
-    });
+    getSessions();
   }, []);
 
   function signInWithHint(session: any): void {
     signIn(
-      "zitadel",
+      'zitadel',
       {
-        callbackUrl: "/",
+        callbackUrl: '/',
       },
       {
         login_hint: session.loginName,
-      }
+      },
     );
   }
 
@@ -68,15 +77,9 @@ export default function ProfileImage({ user }: { user?: any | null }) {
       <div>
         <Menu.Button className="flex items-center bg-zitadelblue-400 justify-center ml-4 transition-all h-8 w-8 rounded-full shadow-lg ring-2 ring-white ring-opacity-50 hover:ring-opacity-100">
           {user && user.image ? (
-            <img
-              className="h-8 w-8 rounded-full"
-              src={user.image}
-              alt="user avatar"
-            />
+            <img className="h-8 w-8 rounded-full" src={user.image} alt="user avatar" />
           ) : (
-            <span className="text-sm">
-              {user && user.name ? user.name.substring(0, 1) : "A"}
-            </span>
+            <span className="text-sm">{user && user.name ? user.name.substring(0, 1) : 'A'}</span>
           )}
         </Menu.Button>
       </div>
@@ -98,17 +101,13 @@ export default function ProfileImage({ user }: { user?: any | null }) {
             <Menu.Item>
               {({ active }) => (
                 <a
-                  href={`${
-                    process.env.NEXT_PUBLIC_ZITADEL_ISSUER
-                  }/ui/console/users/me${
-                    user?.loginName
-                      ? `?login_hint=${encodeURIComponent(user.loginName)}`
-                      : ""
+                  href={`${process.env.NEXT_PUBLIC_ZITADEL_ISSUER}/ui/console/users/me${
+                    user?.loginName ? `?login_hint=${encodeURIComponent(user.loginName)}` : ''
                   }`}
                   target="_blank"
                   rel="noreferrer"
                   className={`${
-                    active ? "bg-zitadelblue-300 text-white" : "text-gray-300"
+                    active ? 'bg-zitadelblue-300 text-white' : 'text-gray-300'
                   } group flex rounded-md justify-center items-center w-full px-2 py-2 text-sm`}
                 >
                   {active ? (
@@ -128,29 +127,21 @@ export default function ProfileImage({ user }: { user?: any | null }) {
                   <button
                     onClick={() => signInWithHint(session)}
                     className={`${
-                      active ? "bg-zitadelblue-300 text-white" : "text-gray-300"
+                      active ? 'bg-zitadelblue-300 text-white' : 'text-gray-300'
                     } group flex rounded-md items-center w-full px-2 py-2 text-sm`}
                   >
                     <div className="w-8 h-8 mr-2 flex items-center justify-center rounded-full bg-black bg-opacity-20">
-                      <span className="text-sm">
-                        {session ? session.displayName.substring(0, 1) : "A"}
-                      </span>
+                      <span className="text-sm">{session ? session.displayName.substring(0, 1) : 'A'}</span>
                     </div>
                     <div className="flex flex-col justify-start">
                       <span className="text-left">{session.displayName}</span>
-                      <span className="text-left text-sm">
-                        {session.userName}
-                      </span>
+                      <span className="text-left text-sm">{session.userName}</span>
                       <span
                         className={`text-left text-sm ${
-                          session.authState === "SESSION_STATE_ACTIVE"
-                            ? "text-green-500"
-                            : "text-red-500"
+                          session.authState === 'SESSION_STATE_ACTIVE' ? 'text-green-500' : 'text-red-500'
                         }`}
                       >
-                        {session.authState === "SESSION_STATE_ACTIVE"
-                          ? "active"
-                          : "inactive"}
+                        {session.authState === 'SESSION_STATE_ACTIVE' ? 'active' : 'inactive'}
                       </span>
                     </div>
                   </button>
@@ -164,19 +155,13 @@ export default function ProfileImage({ user }: { user?: any | null }) {
                 <button
                   onClick={() => logout()}
                   className={`${
-                    active ? "bg-zitadelaccent-800 text-white" : "text-gray-300"
+                    active ? 'bg-zitadelaccent-800 text-white' : 'text-gray-300'
                   } group flex rounded-md justify-center items-center w-full px-2 py-2 text-sm`}
                 >
                   {active ? (
-                    <LogoutIcon
-                      className="w-5 h-5 mr-2 text-violet-400"
-                      aria-hidden="true"
-                    />
+                    <LogoutIcon className="w-5 h-5 mr-2 text-violet-400" aria-hidden="true" />
                   ) : (
-                    <LogoutIcon
-                      className="w-5 h-5 mr-2 text-violet-400"
-                      aria-hidden="true"
-                    />
+                    <LogoutIcon className="w-5 h-5 mr-2 text-violet-400" aria-hidden="true" />
                   )}
                   Logout
                 </button>

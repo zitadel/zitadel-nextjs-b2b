@@ -30,20 +30,17 @@ const authconfig = async (req: NextApiRequest, res: NextApiResponse) =>
         // Access token has expired, try to update it
         return refreshAccessToken(token);
       },
-      async session({ session, token: { user, error: tokenError, accessToken, idToken } }) {
-        session.accessToken = accessToken;
-        session.idToken = idToken as string;
+      async session({ session, token: { user, error: tokenError } }) {
         session.user = {
           id: user?.id,
           email: user?.email,
           image: user?.image,
           name: user?.name,
           loginName: user?.loginName,
-          orgName: user?.organization?.name,
+          orgName: user?.organization.name,
         };
         session.clientId = process.env.ZITADEL_CLIENT_ID;
         session.error = tokenError;
-
         return session;
       },
     },
@@ -53,6 +50,27 @@ const authconfig = async (req: NextApiRequest, res: NextApiResponse) =>
         issuer: process.env.ZITADEL_ISSUER,
         clientId: process.env.ZITADEL_CLIENT_ID,
         clientSecret: process.env.ZITADEL_CLIENT_SECRET,
+        authorization: {
+          params: {
+            scope: `openid email profile offline_access urn:zitadel:iam:user:resourceowner urn:zitadel:iam:org:project:id:zitadel:aud`,
+          },
+        },
+        async profile(profile) {
+          return {
+            id: profile.sub,
+            name: profile.name,
+            firstName: profile.given_name,
+            lastName: profile.family_name,
+            email: profile.email,
+            loginName: profile.preferred_username,
+            image: profile.picture,
+            organization: {
+              id: profile['urn:zitadel:iam:user:resourceowner:id'],
+              name: profile['urn:zitadel:iam:user:resourceowner:name'],
+              primaryDomain: profile['urn:zitadel:iam:user:resourceowner:primary_domain'],
+            },
+          };
+        },
       }),
     ],
   });

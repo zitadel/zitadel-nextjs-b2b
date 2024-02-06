@@ -22,39 +22,52 @@ function HomePage() {
 
   const [selected, setSelected] = useState(ROLES[0]);
 
+  const [roles, setRoles] = useState<string[]>([]);
+  useEffect(() => {
+    if (org) {
+      fetch(`/api/userinfo`).then(async (resp) => {
+        const scope = 'urn:zitadel:iam:org:project:roles';
+        const userinfo = await resp.json();
+        const roles = userinfo[scope];
+
+        if (!roles) {
+          throw Error('No roles in userinfo.');
+        }
+
+        const mappedRoles: string[] = Object.keys(roles).map((role) => {
+          return roles[role][org.id] ? role : null;
+        });
+
+        setRoles(mappedRoles);
+      });
+    }
+  }, [org]);
+
   return (
     <>
       <div className="py-10 pb-6 bg-gray-50 dark:bg-zitadelblue-700 border-b border-gray-200 dark:border-gray-700">
         <div className="container mx-auto max-w-7xl flex justify-between flex-wrap px-6">
           <div className="flex flex-col mb-4">
             <div className="flex items-center mb-1">
-              <h1 className="text-3xl">
-                {org ? `${org.name} ` : null}Granted projects
-              </h1>
+              <h1 className="text-3xl">{org ? `${org.name} ` : null}Granted projects</h1>
             </div>
             <p className="text-black dark:text-white text-opacity-80 dark:text-opacity-80">
-              These are the projects on which your organization has grants
-              (project-grants)
+              These are the projects on which your organization has grants (project-grants)
             </p>
-            {!org && (
-              <p className="my-4 text-red-500">
-                Please select an organization in the navbar above!
-              </p>
-            )}
-            <UserGrant></UserGrant>
+            {!org && <p className="my-4 text-red-500">Please select an organization in the navbar above!</p>}
+            <UserGrant roles={roles}></UserGrant>
           </div>
           <span className="flex-1"></span>
           <div className="flex"></div>
         </div>
       </div>
 
-      <RolesCheck>
-        <GrantRadio
-          selected={selected}
-          setSelected={(role) => setSelected(role)}
-        />
-        {selected === ROLES[0] ? <GrantedProjects /> : null}
-        {selected === ROLES[1] ? <UserGrantTable /> : null}
+      <RolesCheck roles={roles} requiredRole="reader">
+        <>
+          <GrantRadio roles={roles} selected={selected} setSelected={(role) => setSelected(role)} />
+          {selected === ROLES[0] ? <GrantedProjects /> : null}
+          {selected === ROLES[1] ? <UserGrantTable /> : null}
+        </>
       </RolesCheck>
     </>
   );

@@ -1,17 +1,14 @@
-export function hasRole(role: string, orgId: string, authHeader: string): Promise<boolean> {
-  return getRolesFromUserInfo(authHeader)
+export function hasRole(role: string, orgId: string): Promise<boolean> {
+  return getRolesFromUserInfo()
     .then((roles) => roles[role] && roles[role][orgId])
     .catch(() => {
       return false;
     });
 }
 
-export function getRolesFromUserInfo(authHeader): Promise<any> {
-  const userInfoEndpoint = `${process.env.NEXT_PUBLIC_ZITADEL_ISSUER}/oidc/v1/userinfo`;
-
-  return fetch(userInfoEndpoint, {
+export function getRolesFromUserInfo(): Promise<any> {
+  return fetch('/api/userinfo', {
     headers: {
-      authorization: authHeader,
       'content-type': 'application/json',
     },
     method: 'GET',

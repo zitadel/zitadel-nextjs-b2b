@@ -19,26 +19,21 @@ export type ZitadelProjectGrant = {
   projectOwnerName: string;
   state: string;
 };
-export default function ProjectItem({
-  project,
-}: {
-  project: ZitadelProjectGrant;
-}) {
+export default function ProjectItem({ project }: { project: ZitadelProjectGrant }) {
   const { locale } = useRouter();
   return (
-    <a
-      className={`
-                ${open ? "" : "text-opacity-90"}
-                h-full w-full transition-all outline-none focus:outline-none border border-gray-200 dark:border-gray-500 dark:hover:bg-opacity-30 flex flex-col rounded-xl bg-white dark:bg-white dark:bg-opacity-20 relative p-4 py-6 pb-8 hover:shadow`}
+    <div
+      className={`${open ? '' : 'text-opacity-90'}
+                h-full w-full min-w-[300px] transition-all outline-none focus:outline-none flex flex-col rounded-lg bg-white dark:bg-zitadelblue-400 relative p-4 pb-8`}
     >
       <p className="dark:text-white text-left mb-4">{project.projectName}</p>
-      {project.state === "PROJECT_GRANT_STATE_ACTIVE" && (
+      {project.state === 'PROJECT_GRANT_STATE_ACTIVE' && (
         <div className="flex items-center mb-2">
           <p>active</p>
           <div className="mx-2 h-2 w-2 rounded-full bg-green-500 shadow"></div>
         </div>
       )}
-      {project.state === "PROJECT_GRANT_STATE_INACTIVE" && (
+      {project.state === 'PROJECT_GRANT_STATE_INACTIVE' && (
         <div className="flex items-center mb-2">
           <p>inactive</p>
           <div className="mx-2 h-2 w-2 rounded-full bg-red-500 shadow"></div>
@@ -50,11 +45,10 @@ export default function ProjectItem({
       </span>
 
       <span className="text-sm text-left text-gray-500 dark:text-gray-300">
-        granted roles:{" "}
-        {project?.grantedRoleKeys ? project.grantedRoleKeys.join(", ") : ""}
+        granted roles: {project?.grantedRoleKeys ? project.grantedRoleKeys.join(', ') : ''}
       </span>
 
       <div className="absolute bottom-0 right-0"></div>
-    </a>
+    </div>
   );
 }

@@ -10,9 +10,9 @@ export default function GrantedProjects() {
     const org = orgStore.getState().org;
 
     return fetch(`${url}`, {
-      method: "GET",
+      method: 'GET',
       headers: {
-        "content-Type": "application/json",
+        'content-Type': 'application/json',
         authorization: `Bearer ${session.accessToken}`,
         orgid: org.id,
       },
@@ -24,27 +24,29 @@ export default function GrantedProjects() {
       });
   };
 
-  const { data: projects, error: orgError } = useSWR(
-    "/api/grantedprojects",
-    (url) => fetcher(url)
-  );
+  const { data: projects, error: orgError } = useSWR('/api/grantedprojects', (url) => fetcher(url));
 
-  return projects && projects.length ? (
-    <div className="py-10 container md:mx-auto max-w-7xl">
-      <div className="px-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-        {projects.map((project) => (
-          <div
-            key={`
+  return (
+    <div className="container md:mx-auto max-w-7xl px-6">
+      <h2 className="mb-4 text-2xl mt-4">Granted Projects</h2>
+      {projects && projects.length ? (
+        <div className="">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            {projects.map((project) => (
+              <div
+                key={`
             ${project.projectId}${project.grantId}`}
-          >
-            <ProjectItem project={project} />
+              >
+                <ProjectItem project={project} />
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-    </div>
-  ) : (
-    <div className="py-4 container md:mx-auto max-w-7xl px-6">
-      <p className="text-red-500">No granted projects found!</p>
+        </div>
+      ) : (
+        <div className="py-4 container md:mx-auto max-w-7xl px-6">
+          <p className="text-red-500">No granted projects found!</p>
+        </div>
+      )}
     </div>
   );
 }

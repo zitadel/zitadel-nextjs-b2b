@@ -5,28 +5,20 @@ import { getServerSession } from 'next-auth';
 import { getSession } from 'next-auth/react';
 import { getToken } from 'next-auth/jwt';
 
-async function getOrgs(accessToken: string): Promise<any> {
-  const request = `${process.env.ZITADEL_API}/auth/v1/global/projectorgs/_search`;
-
-  console.log(
-    new Date().toLocaleString(),
-    '\n',
-    `call to ${process.env.ZITADEL_API}/auth/v1/global/projectorgs/_search to load orgs.`,
-  );
+export async function getUserInfo(accessToken: string): Promise<any> {
+  const request = `${process.env.ZITADEL_API}/oidc/v1/userinfo`;
+  console.log(new Date().toLocaleString(), '\n', `call to ${process.env.ZITADEL_API}/oidc/v1/userinfo to load roles.`);
 
   return fetch(request, {
     headers: {
       authorization: `Bearer ${accessToken}`,
       'content-type': 'application/json',
     },
-    method: 'POST',
+    method: 'GET',
   })
     .then(handleFetchErrors)
     .then((resp) => {
       return resp.json();
-    })
-    .then((resp) => {
-      return resp.result;
     });
 }
 
@@ -37,8 +29,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   if (req.method === 'GET') {
-    return getOrgs(token.accessToken)
+    return getUserInfo(token.accessToken)
       .then((resp) => {
+        console.log(resp);
         res.status(200).json(resp);
       })
       .catch((error) => {

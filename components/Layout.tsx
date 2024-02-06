@@ -26,9 +26,7 @@ class Layout extends React.Component<Props, State> {
         <div className="dark">
           <div className="relative flex flex-col min-h-screen w-full bg-zitadelblue-800 text-white">
             <Nav></Nav>
-            <main className="flex-grow w-full pt-14">
-              {this.props.children}
-            </main>
+            <main className="flex-grow w-full pt-14">{this.props.children}</main>
             <Footer></Footer>
           </div>
         </div>

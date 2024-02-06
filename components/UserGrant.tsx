@@ -1,31 +1,12 @@
-import { getSession, useSession } from 'next-auth/react';
-import { useEffect } from 'react';
+import { useSession } from 'next-auth/react';
+import { useEffect, useState } from 'react';
 
-import { getRolesFromUserInfo } from '../lib/hasRole';
 import orgStore from '../lib/org';
-import roleStore from '../lib/roles';
 
-export default function UserGrant() {
+export default function UserGrant({ roles }: { roles: string[] }) {
   const org = orgStore((state) => (state as any).org);
 
   const { data: session } = useSession();
-
-  const roles = roleStore((state) => (state as any).roles);
-  const setRoles = roleStore((state) => (state as any).setRoles);
-
-  useEffect(() => {
-    getSession().then((session) => {
-      if (org && roles) {
-        fetch(`/api/roles`).then((roles) => {
-          const mappedRoles: string[] = Object.keys(roles).map((role) => {
-            return roles[role][org.id] ? role : null;
-          });
-
-          setRoles(mappedRoles);
-        });
-      }
-    });
-  }, [org]);
 
   return (
     session && (

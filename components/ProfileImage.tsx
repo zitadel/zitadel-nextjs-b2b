@@ -3,35 +3,17 @@ import { LogoutIcon, PencilIcon } from '@heroicons/react/outline';
 import { getSession, signIn, signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { Fragment, useEffect, useState } from 'react';
+import { LoadingSpinner } from './LoadingSpinner';
+import { Avatar, AvatarSize } from './avatar';
 
 export default function ProfileImage({ user }: { user?: any | null }) {
-  const sessionMap = (res: any): any[] => {
-    return res.result;
-  };
-
-  const fetcher = async (url: string, cb: any) => {
-    const session = (await getSession()) as any;
-    return fetch(`${url}`, {
-      method: 'POST',
-      headers: {
-        authorization: `Bearer ${session.accessToken}`,
-      },
-    })
-      .then((res) => res.json())
-      .then(cb);
-  };
-
   const router = useRouter();
-
-  const { data: session } = useSession();
-  const { idToken } = session as any;
 
   const logout = async () => {
     await signOut({ callbackUrl: '/' });
     const url =
       `${process.env.NEXT_PUBLIC_ZITADEL_ISSUER}/oidc/v1/end_session?` +
       new URLSearchParams({
-        id_token_hint: idToken,
         post_logout_redirect_uri: 'http://localhost:3000',
       });
 
@@ -79,7 +61,7 @@ export default function ProfileImage({ user }: { user?: any | null }) {
           {user && user.image ? (
             <img className="h-8 w-8 rounded-full" src={user.image} alt="user avatar" />
           ) : (
-            <span className="text-sm">{user && user.name ? user.name.substring(0, 1) : 'A'}</span>
+            <Avatar size={AvatarSize.SMALL} loginName={user.loginName} name={user.displayName}></Avatar>
           )}
         </Menu.Button>
       </div>
@@ -120,34 +102,37 @@ export default function ProfileImage({ user }: { user?: any | null }) {
               )}
             </Menu.Item>
           </div>
-          <div className="px-1 py-1 max-h-96 overflow-y-auto">
-            {sessions.map((session, i) => (
-              <Menu.Item key={`${session.userName}${i}`}>
-                {({ active }) => (
-                  <button
-                    onClick={() => signInWithHint(session)}
-                    className={`${
-                      active ? 'bg-zitadelblue-300 text-white' : 'text-gray-300'
-                    } group flex rounded-md items-center w-full px-2 py-2 text-sm`}
-                  >
-                    <div className="w-8 h-8 mr-2 flex items-center justify-center rounded-full bg-black bg-opacity-20">
-                      <span className="text-sm">{session ? session.displayName.substring(0, 1) : 'A'}</span>
-                    </div>
-                    <div className="flex flex-col justify-start">
-                      <span className="text-left">{session.displayName}</span>
-                      <span className="text-left text-sm">{session.userName}</span>
-                      <span
-                        className={`text-left text-sm ${
-                          session.authState === 'SESSION_STATE_ACTIVE' ? 'text-green-500' : 'text-red-500'
-                        }`}
-                      >
-                        {session.authState === 'SESSION_STATE_ACTIVE' ? 'active' : 'inactive'}
-                      </span>
-                    </div>
-                  </button>
-                )}
-              </Menu.Item>
-            ))}
+          <div className="px-1 py-1 max-h-96 overflow-y-auto flex flex-col">
+            {isLoading && <LoadingSpinner className="h-7 w-7 self-center my-2" />}
+            {sessions
+              .filter((s) => s.loginName !== user.loginName)
+              .map((session, i) => (
+                <Menu.Item key={`${session.userName}${i}`}>
+                  {({ active }) => (
+                    <button
+                      onClick={() => signInWithHint(session)}
+                      className={`${
+                        active ? 'bg-zitadelblue-300 text-white' : 'text-gray-300'
+                      } group flex rounded-md items-center w-full px-2 py-2 text-sm`}
+                    >
+                      <div className="mr-4">
+                        <Avatar size={AvatarSize.SMALL} loginName={session.loginName} name={session.displayName}></Avatar>
+                      </div>
+                      <div className="flex flex-col justify-start">
+                        <span className="text-left">{session.displayName}</span>
+                        <span className="text-left text-sm">{session.userName}</span>
+                        <span
+                          className={`text-left text-sm ${
+                            session.authState === 'SESSION_STATE_ACTIVE' ? 'text-green-500' : 'text-red-500'
+                          }`}
+                        >
+                          {session.authState === 'SESSION_STATE_ACTIVE' ? 'active' : 'inactive'}
+                        </span>
+                      </div>
+                    </button>
+                  )}
+                </Menu.Item>
+              ))}
           </div>
           <div className="px-1 py-1">
             <Menu.Item>

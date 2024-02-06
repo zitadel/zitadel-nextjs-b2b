@@ -6,7 +6,6 @@ import { getServerSession } from 'next-auth';
 
 const getSessions = async (req: NextApiRequest, res: NextApiResponse, accessToken: string) => {
   const request = `${process.env.ZITADEL_API}/auth/v1/users/me/sessions/_search`;
-  console.log('ac', accessToken);
   return fetch(request, {
     headers: {
       authorization: `Bearer ${accessToken}`,

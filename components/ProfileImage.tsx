@@ -12,7 +12,7 @@ export default function ProfileImage({ user }: { user?: any | null }) {
   const logout = async () => {
     await signOut({ callbackUrl: '/' });
     const url =
-      `${process.env.NEXT_PUBLIC_ZITADEL_ISSUER}/oidc/v1/end_session?` +
+      `${process.env.PUBLIC_NEXT_ZITADEL_API}/oidc/v1/end_session?` +
       new URLSearchParams({
         post_logout_redirect_uri: 'http://localhost:3000',
       });
@@ -85,7 +85,7 @@ export default function ProfileImage({ user }: { user?: any | null }) {
             <Menu.Item>
               {({ active }) => (
                 <a
-                  href={`${process.env.NEXT_PUBLIC_ZITADEL_ISSUER}/ui/console/users/me${
+                  href={`${process.env.PUBLIC_NEXT_ZITADEL_API}/ui/console/users/me${
                     user?.loginName ? `?login_hint=${encodeURIComponent(user.loginName)}` : ''
                   }`}
                   target="_blank"

@@ -47,7 +47,7 @@ const authconfig = async (req: NextApiRequest, res: NextApiResponse) =>
     debug: true,
     providers: [
       ZitadelProvider({
-        issuer: process.env.ZITADEL_ISSUER,
+        issuer: process.env.ZITADEL_API,
         clientId: process.env.ZITADEL_CLIENT_ID,
         clientSecret: process.env.ZITADEL_CLIENT_SECRET,
         authorization: {
@@ -84,7 +84,7 @@ export default authconfig;
  */
 async function refreshAccessToken(token: JWT): Promise<JWT> {
   try {
-    const issuer = await Issuer.discover(process.env.ZITADEL_ISSUER ?? '');
+    const issuer = await Issuer.discover(process.env.ZITADEL_API);
     const client = new issuer.Client({
       client_id: process.env.ZITADEL_CLIENT_ID || '',
       token_endpoint_auth_method: 'none',

@@ -76,7 +76,7 @@ Create a file `.env.local` and copy paste the following:
 
 ```text
 NEXTAUTH_URL=http://localhost:3000
-NEXT_PUBLIC_ZITADEL_ISSUER=https://{YourDomain}.zitadel.cloud
+PUBLIC_NEXT_ZITADEL_API=https://{YourDomain}.zitadel.cloud
 ZITADEL_API=https://{YourDomain}.zitadel.cloud
 ORG_ID={YourOrgId}
 PROJECT_ID={YourProjectId}
@@ -89,9 +89,9 @@ Replace the values as follows
 
 `NEXTAUTH_URL`: Base url of this demo app (B2B portal); runs per default on [http://localhost:3000](http://localhost:3000)
 
-`NEXT_PUBLIC_ZITADEL_ISSUER`: The url to your zitadel instance. When using zitadel.cloud for this demo you can find the domain of your ZITADEL instance in the customer portal. You can also find this information by going to your application `portal-web` and click 'Urls' in the navigation. The variable is prefixed with `NEXT_PUBLIC_` such that it can be accessed from the client.
+`PUBLIC_NEXT_ZITADEL_API`: The url to your zitadel instance. When using zitadel.cloud for this demo you can find the domain of your ZITADEL instance in the customer portal. You can also find this information by going to your application `portal-web` and click 'Urls' in the navigation. The variable is prefixed with `NEXT_PUBLIC_` such that it can be accessed from the client.
 
-`ZITADEL_API`: URL of the Management API. Typically the same as `ZITADEL_ISSUER`.
+`ZITADEL_API`: URL of the Management API. The same as `PUBLIC_NEXT_ZITADEL_API`.
 
 `ORG_ID`: We will create an organization during later steps. You can find `{YourOrgId}` by selecting the `Demo-Vendor` organization in Console. `{YourOrgId}` is displayed on top of the organization detail page as "Resource Id".
 

@@ -4,7 +4,7 @@ import { getSession, signIn, signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { Fragment, useEffect, useState } from 'react';
 import { LoadingSpinner } from './LoadingSpinner';
-import { Avatar, AvatarSize } from './avatar';
+import { Avatar, AvatarSize } from './Avatar';
 
 export default function ProfileImage({ user }: { user?: any | null }) {
   const router = useRouter();

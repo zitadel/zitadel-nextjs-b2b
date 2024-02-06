@@ -31,7 +31,7 @@ export default function GrantedProjects() {
       <h2 className="mb-4 text-2xl mt-4">Granted Projects</h2>
       {projects && projects.length ? (
         <div className="">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+          <div className="flex flex-row gap-4">
             {projects.map((project) => (
               <div
                 key={`

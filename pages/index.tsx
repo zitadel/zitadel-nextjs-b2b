@@ -8,6 +8,7 @@ import UserGrant from '../components/UserGrant';
 import UserGrantTable from '../components/UserGrantTable';
 import orgStore from '../lib/org';
 import { ROLES } from '../lib/roles';
+import { LoadingSpinner } from '../components/LoadingSpinner';
 
 export default function Home() {
   return (
@@ -23,23 +24,32 @@ function HomePage() {
   const [selected, setSelected] = useState(ROLES[0]);
 
   const [roles, setRoles] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
     if (org) {
-      fetch(`/api/userinfo`).then(async (resp) => {
-        const scope = 'urn:zitadel:iam:org:project:roles';
-        const userinfo = await resp.json();
-        const roles = userinfo[scope];
+      setIsLoading(true);
+      fetch(`/api/userinfo`)
+        .then(async (resp) => {
+          const scope = 'urn:zitadel:iam:org:project:roles';
+          const userinfo = await resp.json();
+          const roles = userinfo[scope];
 
-        if (!roles) {
-          throw Error('No roles in userinfo.');
-        }
+          if (!roles) {
+            throw Error('No roles in userinfo.');
+          }
 
-        const mappedRoles: string[] = Object.keys(roles).map((role) => {
-          return roles[role][org.id] ? role : null;
+          const mappedRoles: string[] = Object.keys(roles).map((role) => {
+            return roles[role][org.id] ? role : null;
+          });
+
+          setIsLoading(false);
+          setRoles(mappedRoles);
+        })
+        .catch((error) => {
+          console.error(error);
+          setIsLoading(false);
         });
-
-        setRoles(mappedRoles);
-      });
     }
   }, [org]);
 
@@ -58,9 +68,10 @@ function HomePage() {
             <UserGrant roles={roles}></UserGrant>
           </div>
           <span className="flex-1"></span>
-          <div className="flex"></div>
         </div>
       </div>
+
+      {isLoading && <LoadingSpinner className="ml-6 h-7 w-7 self-center my-4 mb-2" />}
 
       <RolesCheck roles={roles} requiredRole="reader">
         <>

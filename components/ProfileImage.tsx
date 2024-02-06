@@ -20,20 +20,22 @@ export default function ProfileImage({ user }: { user?: any | null }) {
     return router.push(url);
   };
 
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const getSessions = async () => {
+    setIsLoading(true);
     try {
       const response = await fetch('/api/sessions');
       const data = await response.json();
       if (data && typeof data === 'object' && data.length) {
         setSessions(data);
+        setIsLoading(false);
       }
     } catch (error) {
       setSessions([]);
       console.error(error);
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   const [sessions, setSessions] = useState<any[]>([]);

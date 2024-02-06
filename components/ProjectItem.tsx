@@ -23,8 +23,9 @@ export default function ProjectItem({ project }: { project: ZitadelProjectGrant 
   const { locale } = useRouter();
   return (
     <div
-      className={`${open ? '' : 'text-opacity-90'}
-                h-full w-full min-w-[300px] transition-all outline-none focus:outline-none flex flex-col rounded-lg bg-white dark:bg-zitadelblue-400 relative p-4 pb-8`}
+      className={`${
+        open ? '' : 'text-opacity-90'
+      } h-full w-full min-w-[300px] transition-all outline-none focus:outline-none flex flex-col rounded-lg bg-white dark:bg-white/10 relative p-4 pb-8`}
     >
       <p className="dark:text-white text-left mb-4">{project.projectName}</p>
       {project.state === 'PROJECT_GRANT_STATE_ACTIVE' && (

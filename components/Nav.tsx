@@ -117,7 +117,7 @@ function NavButtons() {
 
   function login() {
     signIn(
-      'zitadel' as any,
+      'zitadel',
       {
         callbackUrl: '/',
       },

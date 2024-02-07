@@ -6,9 +6,6 @@ import { Issuer } from 'openid-client';
 
 const authconfig = async (req: NextApiRequest, res: NextApiResponse) =>
   NextAuth(req, res, {
-    pages: {
-      signIn: '/signin',
-    },
     callbacks: {
       async jwt({ token, user, account }) {
         if (req.url?.startsWith('/api/auth/session?orgName=')) {

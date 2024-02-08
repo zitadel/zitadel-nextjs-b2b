@@ -6,41 +6,6 @@ import { Issuer } from 'openid-client';
 
 const authconfig = async (req: NextApiRequest, res: NextApiResponse) =>
   NextAuth(req, res, {
-    callbacks: {
-      async jwt({ token, user, account }) {
-        if (req.url?.startsWith('/api/auth/session?orgName=')) {
-          if (req.query.orgName && typeof req.query.orgName === 'string' && token.user && token.user.organization) {
-            token.user.organization.name = req.query.orgName;
-          }
-        }
-
-        token.user ??= user;
-        token.accessToken ??= account?.access_token;
-        token.refreshToken ??= account?.refresh_token;
-        token.expiresAt ??= (account?.expires_at ?? 0) * 1000;
-        token.error = undefined;
-        // Return previous token if the access token has not expired yet
-        if (Date.now() < (token.expiresAt as number)) {
-          return token;
-        }
-
-        // Access token has expired, try to update it
-        return refreshAccessToken(token);
-      },
-      async session({ session, token: { user, error: tokenError } }) {
-        session.user = {
-          id: user?.id,
-          email: user?.email,
-          image: user?.image,
-          name: user?.name,
-          loginName: user?.loginName,
-          orgName: user?.organization.name,
-        };
-        session.clientId = process.env.ZITADEL_CLIENT_ID;
-        session.error = tokenError;
-        return session;
-      },
-    },
     debug: true,
     providers: [
       ZitadelProvider({
@@ -70,6 +35,35 @@ const authconfig = async (req: NextApiRequest, res: NextApiResponse) =>
         },
       }),
     ],
+    callbacks: {
+      async jwt({ token, user, account }) {
+        token.user ??= user;
+        token.accessToken ??= account?.access_token;
+        token.refreshToken ??= account?.refresh_token;
+        token.expiresAt ??= (account?.expires_at ?? 0) * 1000;
+        token.error = undefined;
+        // Return previous token if the access token has not expired yet
+        if (Date.now() < (token.expiresAt as number)) {
+          return token;
+        }
+
+        // Access token has expired, try to update it
+        return refreshAccessToken(token);
+      },
+      async session({ session, token: { user, error: tokenError } }) {
+        session.user = {
+          id: user?.id,
+          email: user?.email,
+          image: user?.image,
+          name: user?.name,
+          loginName: user?.loginName,
+          orgName: user?.organization.name,
+        };
+        session.clientId = process.env.ZITADEL_CLIENT_ID;
+        session.error = tokenError;
+        return session;
+      },
+    },
   });
 
 export default authconfig;

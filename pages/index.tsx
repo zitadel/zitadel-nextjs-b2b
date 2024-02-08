@@ -24,7 +24,7 @@ function HomePage() {
   const [selected, setSelected] = useState(ROLES[0]);
 
   const [roles, setRoles] = useState<string[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (org) {
@@ -71,7 +71,9 @@ function HomePage() {
         </div>
       </div>
 
-      {isLoading && <LoadingSpinner className="ml-6 h-7 w-7 self-center my-4 mb-2" />}
+      <div className="container mx-auto max-w-7xl px-6">
+        {isLoading && <LoadingSpinner className="ml-6 h-7 w-7 self-center my-4 mb-2" />}
+      </div>
 
       <RolesCheck roles={roles} requiredRole="reader">
         <>

@@ -1,8 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
 import { handleFetchErrors } from '../../lib/middleware';
-import { getServerSession } from 'next-auth';
-import { getSession } from 'next-auth/react';
 import { getToken } from 'next-auth/jwt';
 
 async function getOrgs(accessToken: string): Promise<any> {
@@ -32,6 +30,7 @@ async function getOrgs(accessToken: string): Promise<any> {
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const token = await getToken({ req });
+  console.log(token);
   if (!token?.accessToken) {
     return res.status(401).end();
   }

@@ -164,6 +164,12 @@ You should be able to login to the Demo Application with `Alice Admin` and see a
 
 You can log out and log in with `Eric Employee` and you should only have access to the granted projects, but not to the Authorizations tab.
 
+### Deploy to Vercel
+
+To deploy your own version on Vercel, setup your instance like the description above and provide the variables in the dedicated fields for the environment.
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fzitadel%2Fzitadel-nextjs-b2b&env=NEXTAUTH_SECRET,NEXTAUTH_URL,ORG_ID,PROJECT_ID,SERVICE_ACCOUNT_ACCESS_TOKEN,ZITADEL_API,PUBLIC_NEXT_ZITADEL_API,ZITADEL_CLIENT_ID,ZITADEL_CLIENT_SECRET&project-name=zitadel-b2b&repository-name=zitadel-b2b)
+
 ## What next
 
 You could create another project (eg, `Data Cube`) and grant that project to the customer organization. The granted project should appear after a reload automatically. This gives you an idea of how you could do Service Discovery with ZITADEL.

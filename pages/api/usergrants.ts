@@ -1,9 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
-import { hasRole } from '../../lib/hasRole';
 import { handleFetchErrors } from '../../lib/middleware';
 import { getUserInfo } from './userinfo';
-import { getToken } from 'next-auth/jwt';
+import { authOptions } from './auth/[...nextauth]';
+import { getServerSession } from 'next-auth';
 
 function getUserGrants(orgId: string, accessToken: string, role: string): Promise<any> {
   return getUserInfo(accessToken)
@@ -98,15 +98,16 @@ function getUserGrants(orgId: string, accessToken: string, role: string): Promis
 }
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const token = await getToken({ req });
-  if (!token?.accessToken) {
+  const session = await getServerSession(req, res, authOptions);
+
+  if (!session?.accessToken) {
     return res.status(401).end();
   }
 
   if (req.method === 'GET') {
     const orgId = req.headers.orgid as string;
 
-    return getUserGrants(orgId, token.accessToken, 'admin')
+    return getUserGrants(orgId, session.accessToken, 'admin')
       .then((resp) => {
         res.status(200).json(resp);
       })

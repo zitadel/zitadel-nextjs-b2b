@@ -1,9 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
-import { hasRole } from '../../lib/hasRole';
 import { handleFetchErrors } from '../../lib/middleware';
 import { getUserInfo } from './userinfo';
-import { getToken } from 'next-auth/jwt';
+import { getServerSession } from 'next-auth';
+import { authOptions } from './auth/[...nextauth]';
 
 function getGrantedProjectsOfUser(orgId: string, accessToken: string, role: string): Promise<any> {
   return getUserInfo(accessToken)
@@ -78,15 +78,15 @@ function getGrantedProjectsOfUser(orgId: string, accessToken: string, role: stri
 }
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const token = await getToken({ req });
-  if (!token?.accessToken) {
+  const session = await getServerSession(req, res, authOptions);
+  if (!session?.accessToken) {
     return res.status(401).end();
   }
 
   if (req.method === 'GET') {
     const orgId = req.headers.orgid as string;
 
-    return getGrantedProjectsOfUser(orgId, token.accessToken, 'reader')
+    return getGrantedProjectsOfUser(orgId, session.accessToken, 'reader')
       .then((resp) => {
         res.status(200).json(resp);
       })

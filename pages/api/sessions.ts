@@ -1,8 +1,7 @@
-import { getToken } from 'next-auth/jwt';
-
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { handleFetchErrors } from '../../lib/middleware';
 import { getServerSession } from 'next-auth';
+import { authOptions } from './auth/[...nextauth]';
 
 const getSessions = async (req: NextApiRequest, res: NextApiResponse, accessToken: string) => {
   const request = `${process.env.ZITADEL_API}/auth/v1/users/me/sessions/_search`;
@@ -26,7 +25,7 @@ const getSessions = async (req: NextApiRequest, res: NextApiResponse, accessToke
 };
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  const token = await getToken({ req });
+  const token = await getServerSession(req, res, authOptions);
   if (!token?.accessToken) {
     return res.status(401).end();
   }

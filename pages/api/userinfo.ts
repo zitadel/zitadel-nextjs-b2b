@@ -2,8 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 import { handleFetchErrors } from '../../lib/middleware';
 import { getServerSession } from 'next-auth';
-import { getSession } from 'next-auth/react';
-import { getToken } from 'next-auth/jwt';
+import { authOptions } from './auth/[...nextauth]';
 
 export async function getUserInfo(accessToken: string): Promise<any> {
   const request = `${process.env.ZITADEL_API}/oidc/v1/userinfo`;
@@ -23,15 +22,14 @@ export async function getUserInfo(accessToken: string): Promise<any> {
 }
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const token = await getToken({ req });
-  if (!token?.accessToken) {
+  const session = await getServerSession(req, res, authOptions);
+  if (!session?.accessToken) {
     return res.status(401).end();
   }
 
   if (req.method === 'GET') {
-    return getUserInfo(token.accessToken)
+    return getUserInfo(session.accessToken)
       .then((resp) => {
-        console.log(resp);
         res.status(200).json(resp);
       })
       .catch((error) => {

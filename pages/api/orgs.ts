@@ -1,7 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
 import { handleFetchErrors } from '../../lib/middleware';
-import { getToken } from 'next-auth/jwt';
+import { getServerSession } from 'next-auth';
+import { authOptions } from './auth/[...nextauth]';
 
 async function getOrgs(accessToken: string): Promise<any> {
   const request = `${process.env.ZITADEL_API}/auth/v1/global/projectorgs/_search`;
@@ -29,14 +30,13 @@ async function getOrgs(accessToken: string): Promise<any> {
 }
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const token = await getToken({ req });
-  console.log(token);
-  if (!token?.accessToken) {
+  const session = await getServerSession(req, res, authOptions);
+  if (!session?.accessToken) {
     return res.status(401).end();
   }
 
   if (req.method === 'GET') {
-    return getOrgs(token.accessToken)
+    return getOrgs(session.accessToken)
       .then((resp) => {
         res.status(200).json(resp);
       })

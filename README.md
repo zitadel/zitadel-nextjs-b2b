@@ -31,9 +31,9 @@ Open the Console (`https://{YourDomain}.zitadel.cloud/ui/console/projects`) and 
 
 Then on the project detail page click on new application and enter a name for this app.
 Let's call this one `portal-web`.
-Select `Web`, continue, `PKCE`, then enter `http://localhost:3000/api/auth/callback/zitadel` for the redirect, and `http://localhost:3000` for the post redirect. Then press on `create`.
+Select `Web`, continue, `Code`, then enter `http://localhost:3000/api/auth/callback/zitadel` for the redirect, and `http://localhost:3000` for the post redirect. Then press on `create`.
 
-Copy the "Resource Id" of the project `Portal` as you will need this in your environment configuration file later.
+Copy the "Secret" and "Resource Id" of the project `Portal` as you will need this in your environment configuration file later.
 
 Click on the application `portal-web`.
 On the application detail page click on the section under redirect settings and enable `Development Mode`. This will allow you application to work on `localhost:3000`.

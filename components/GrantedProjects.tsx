@@ -43,8 +43,8 @@ export default function GrantedProjects() {
           </div>
         </div>
       ) : (
-        <div className="py-4 container md:mx-auto max-w-7xl px-6">
-          <p className="text-red-500">No granted projects found!</p>
+        <div className="py-4">
+          <p className="opacity-80">No granted projects found!</p>
         </div>
       )}
     </div>

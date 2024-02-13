@@ -25,7 +25,7 @@ export const Avatar: FC<AvatarProps> = ({ size = AvatarSize.BASE, name, loginNam
     const split = name.split(' ');
     const initials = split[0].charAt(0) + (split[1] ? split[1].charAt(0) : '');
     credentials = initials;
-  } else {
+  } else if (loginName) {
     const username = loginName.split('@')[0];
     let separator = '_';
     if (username.includes('-')) {
@@ -37,9 +37,11 @@ export const Avatar: FC<AvatarProps> = ({ size = AvatarSize.BASE, name, loginNam
     const split = username.split(separator);
     const initials = split[0].charAt(0) + (split[1] ? split[1].charAt(0) : '');
     credentials = initials;
+  } else {
+    credentials = 'A';
   }
 
-  const color: Color = getColorHash(loginName);
+  const color: Color = getColorHash(loginName ?? name ?? 'A');
 
   const avatarStyleDark = {
     backgroundColor: color[900],

@@ -18,7 +18,7 @@ export default function GrantedProjects() {
       },
     })
       .then((res) => res.json())
-      .then((resp) => resp.result)
+      .then((resp) => resp.result ?? [])
       .catch((error) => {
         console.error(error);
       });

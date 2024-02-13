@@ -25,7 +25,7 @@ async function getOrgs(accessToken: string): Promise<any> {
       return resp.json();
     })
     .then((resp) => {
-      return resp.result;
+      return resp.result ?? [];
     });
 }
 

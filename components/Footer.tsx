@@ -4,18 +4,15 @@ import FooterLink from './FooterLink';
 
 const Footer = () => {
   const router = useRouter();
-  const effectClasses =
-    "filter grayscale transform hover:brightness-75 dark:hover:brightness-125";
+  const effectClasses = 'filter grayscale transform hover:brightness-75 dark:hover:brightness-125';
 
   return (
     <>
-      <footer className="bg-footer-light dark:bg-zitadelblue-900 text-grey font-medium text-sm pt-8 w-full">
+      <footer className="bg-footer-light dark:bg-zitadelblue-900 text-grey font-medium text-sm pt-8 w-full border-t border-white/20">
         <div className="container mx-auto flex-col px-6 max-w-7xl">
           <div className="flex flex-row flex-wrap -mx-3">
             <div className="flex-1 px-3 py-6 min-w-half md:min-w-0 box-border">
-              <p className="text-xs text-gray-400 uppercase mb-4 font-semibold">
-                ZITADEL
-              </p>
+              <p className="text-xs text-gray-400 uppercase mb-4 font-semibold">ZITADEL</p>
 
               <FooterLink external href="https://zitadel.com">
                 Home
@@ -26,22 +23,14 @@ const Footer = () => {
             </div>
 
             <div className="flex-1 px-3 py-6 min-w-half md:min-w-0 box-border">
-              <p className="text-xs text-gray-400 uppercase mb-4 font-semibold">
-                Examples
-              </p>
+              <p className="text-xs text-gray-400 uppercase mb-4 font-semibold">Examples</p>
 
-              <FooterLink
-                href="https://docs.zitadel.com/docs/quickstarts/introduction"
-                external
-              >
+              <FooterLink href="https://zitadel.com/docs/examples/introduction" external>
                 Quickstarts
               </FooterLink>
 
-              <FooterLink
-                href="https://github.com/zitadel/zitadel-examples"
-                external
-              >
-                Example Repo
+              <FooterLink href="https://zitadel.com/docs/examples/sdks" external>
+                SDKs
               </FooterLink>
             </div>
           </div>
@@ -54,7 +43,7 @@ const Footer = () => {
                 </a>
                 , Lerchenfeldstrasse 3, 9014 St. Gallen, Switzerland
               </p>
-              <span className="text-gray-500 md:mr-6">© 2021</span>
+              <span className="text-gray-500 md:mr-6">{`© ${new Date().getFullYear()}`}</span>
             </div>
 
             <div className="grid grid-cols-3 gap-2 my-2">

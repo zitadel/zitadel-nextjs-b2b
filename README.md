@@ -31,9 +31,9 @@ Open the Console (`https://{YourDomain}.zitadel.cloud/ui/console/projects`) and 
 
 Then on the project detail page click on new application and enter a name for this app.
 Let's call this one `portal-web`.
-Select `Web`, continue, `PKCE`, then enter `http://localhost:3000/api/auth/callback/zitadel` for the redirect, and `http://localhost:3000` for the post redirect. Then press on `create`.
+Select `Web`, continue, `Code`, then enter `http://localhost:3000/api/auth/callback/zitadel` for the redirect, and `http://localhost:3000` for the post redirect. Then press on `create`.
 
-Copy the "Resource Id" of the project `Portal` as you will need this in your environment configuration file later.
+Copy the "Secret" and "Resource Id" of the project `Portal` as you will need this in your environment configuration file later.
 
 Click on the application `portal-web`.
 On the application detail page click on the section under redirect settings and enable `Development Mode`. This will allow you application to work on `localhost:3000`.
@@ -76,7 +76,7 @@ Create a file `.env.local` and copy paste the following:
 
 ```text
 NEXTAUTH_URL=http://localhost:3000
-NEXT_PUBLIC_ZITADEL_ISSUER=https://{YourDomain}.zitadel.cloud
+PUBLIC_NEXT_ZITADEL_API=https://{YourDomain}.zitadel.cloud
 ZITADEL_API=https://{YourDomain}.zitadel.cloud
 ORG_ID={YourOrgId}
 PROJECT_ID={YourProjectId}
@@ -89,9 +89,9 @@ Replace the values as follows
 
 `NEXTAUTH_URL`: Base url of this demo app (B2B portal); runs per default on [http://localhost:3000](http://localhost:3000)
 
-`NEXT_PUBLIC_ZITADEL_ISSUER`: The url to your zitadel instance. When using zitadel.cloud for this demo you can find the domain of your ZITADEL instance in the customer portal. You can also find this information by going to your application `portal-web` and click 'Urls' in the navigation. The variable is prefixed with `NEXT_PUBLIC_` such that it can be accessed from the client.
+`PUBLIC_NEXT_ZITADEL_API`: The url to your zitadel instance. When using zitadel.cloud for this demo you can find the domain of your ZITADEL instance in the customer portal. You can also find this information by going to your application `portal-web` and click 'Urls' in the navigation. The variable is prefixed with `PUBLIC_NEXT` such that it can be accessed from the client.
 
-`ZITADEL_API`: URL of the Management API. Typically the same as `ZITADEL_ISSUER`.
+`ZITADEL_API`: URL of the Management API. The same as `PUBLIC_NEXT_ZITADEL_API`.
 
 `ORG_ID`: We will create an organization during later steps. You can find `{YourOrgId}` by selecting the `Demo-Vendor` organization in Console. `{YourOrgId}` is displayed on top of the organization detail page as "Resource Id".
 
@@ -163,6 +163,12 @@ Give `Alice Admin` the roles `reader` and `admin`.
 You should be able to login to the Demo Application with `Alice Admin` and see all granted projects.
 
 You can log out and log in with `Eric Employee` and you should only have access to the granted projects, but not to the Authorizations tab.
+
+### Deploy to Vercel
+
+To deploy your own version on Vercel, setup your instance like the description above and provide the variables in the dedicated fields for the environment.
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fzitadel%2Fzitadel-nextjs-b2b&env=NEXTAUTH_SECRET,NEXTAUTH_URL,ORG_ID,PROJECT_ID,SERVICE_ACCOUNT_ACCESS_TOKEN,ZITADEL_API,PUBLIC_NEXT_ZITADEL_API,ZITADEL_CLIENT_ID,ZITADEL_CLIENT_SECRET&project-name=zitadel-b2b&repository-name=zitadel-b2b)
 
 ## What next
 

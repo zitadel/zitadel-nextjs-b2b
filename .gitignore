@@ -32,3 +32,11 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+.yarn/*
+# !.yarn/cache # enable zero-install
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions

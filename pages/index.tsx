@@ -75,7 +75,7 @@ function HomePage() {
         {isLoading && <LoadingSpinner className="ml-6 h-7 w-7 self-center my-4 mb-2" />}
       </div>
 
-      <RolesCheck roles={roles} requiredRole="reader">
+      <RolesCheck roles={roles} requiredRole="admin">
         <>
           <GrantRadio roles={roles} selected={selected} setSelected={(role) => setSelected(role)} />
           {selected === ROLES[0] ? <GrantedProjects /> : null}

@@ -2,13 +2,15 @@ import { getSession } from 'next-auth/react';
 import useSWR, { mutate } from 'swr';
 import { useState, Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
-import { PencilIcon, TrashIcon, PlusIcon } from '@heroicons/react/outline';
+import { PencilIcon, TrashIcon, PlusIcon, UserAddIcon } from '@heroicons/react/outline';
 import orgStore from '../lib/org';
+import InviteUserModal from './InviteUserModal';
 
 export default function UserGrantTable() {
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [addModalOpen, setAddModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [inviteModalOpen, setInviteModalOpen] = useState(false);
   const [selectedGrant, setSelectedGrant] = useState<any>(null);
   const [selectedProject, setSelectedProject] = useState<any>(null);
   const [editRoles, setEditRoles] = useState<string[]>([]);
@@ -220,11 +222,32 @@ export default function UserGrantTable() {
     }
   };
 
+  const handleUserCreated = (userData: any) => {
+    // Refresh the user grants data after a new user is created
+    mutate(`/api/usergrants?orgId=${org.id}`);
+    
+    // Optionally refresh org users data as well
+    mutate(`/api/orgusers?orgId=${org.id}`);
+    
+    // You could also show a success message here
+    console.log('User created successfully:', userData);
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-6">
-      <h2 className="mb-4 text-2xl mt-4">User Grants</h2>
-
-      <p className="text-sm text-gray-300 mb-4">These are the user grants for all granted projects in your organization.</p>
+      <div className="flex justify-between items-center mb-4">
+        <div>
+          <h2 className="text-2xl mt-4">User Grants</h2>
+          <p className="text-sm text-gray-300 mt-2">These are the user grants for all granted projects in your organization.</p>
+        </div>
+        <button
+          onClick={() => setInviteModalOpen(true)}
+          className="flex items-center px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition-colors"
+        >
+          <UserAddIcon className="w-5 h-5 mr-2" />
+          Invite User
+        </button>
+      </div>
 
       {grantsByProject &&
         Object.entries(grantsByProject).map(([projectId, projectData]: any) => (
@@ -587,6 +610,13 @@ export default function UserGrantTable() {
           </div>
         </Dialog>
       </Transition>
+
+      {/* Invite User Modal */}
+      <InviteUserModal
+        isOpen={inviteModalOpen}
+        onClose={() => setInviteModalOpen(false)}
+        onUserCreated={handleUserCreated}
+      />
     </div>
   );
 }

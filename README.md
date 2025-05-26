@@ -75,7 +75,7 @@ Then on the project detail page click on new application and enter a name for th
 Let's call this one `portal-web`.
 Select `Web`, continue, `Code`, then enter `http://localhost:3000/api/auth/callback/zitadel` for the redirect, and `http://localhost:3000` for the post redirect. Then press on `create`.
 
-Copy the "Secret" and "Resource Id" of the project `Portal` as you will need this in your environment configuration file later.
+Copy the "Client Secret" from the newly created `portal-web` application as you will need this in your environment configuration file later.
 
 Click on the application `portal-web`.
 On the application detail page click on the section under redirect settings and enable `Development Mode`. This will allow you application to work on `localhost:3000`.
@@ -111,6 +111,8 @@ Make sure to select `Project Owner Viewer` as the management role.
 
 To show granted projects, go to the `Demo-Vendor` organization and add the Service User as `Org Project Permission Editor` Manager.
 
+To manage user grants and invite new users, go to the `Demo-Customer` organization and add the Service User as `Org User Manager` Manager.
+
 ## Step 2: Configuration
 
 Now clone this project and navigate to its root folder.
@@ -122,6 +124,7 @@ PUBLIC_NEXT_ZITADEL_API=https://{YourDomain}.zitadel.cloud
 ZITADEL_API=https://{YourDomain}.zitadel.cloud
 ORG_ID={YourOrgId}
 ZITADEL_CLIENT_ID={YourClientID}
+ZITADEL_CLIENT_SECRET={YourClientSecret}
 SERVICE_ACCOUNT_ACCESS_TOKEN={YourServiceAccountSecret}
 NEXTAUTH_SECRET=randomsecret
 ```
@@ -136,7 +139,9 @@ Replace the values as follows
 
 `ORG_ID`: (Optional) You can find `{YourOrgId}` by selecting the `Demo-Vendor` organization in Console. `{YourOrgId}` is displayed on top of the organization detail page as "Resource Id". The application now dynamically handles multiple organizations, so this is only used as a fallback when no organization is specified in the user's session.
 
-`ZITADEL_CLIENT_ID`: Having the project `Portal` selected, click on the Application `portal-web`. `{YourClientID}` is displayed as a field in the OIDC configuration, labelled "Client ID" and has the format `12345678@portal`.
+`ZITADEL_CLIENT_ID`: Having the project `Portal` selected, click on the Application `portal-web`. `{YourClientID}` is displayed as a field in the OIDC configuration, labelled "Client Id".
+
+`ZITADEL_CLIENT_SECRET`: You should have saved the Client Secret when creating the `portal-web` application. Otherwise, having the project `Portal` selected, click on the Application `portal-web`. There, clicking on the "Actions" dropdown menu, you can Regenerate the Client Secret for the application.
 
 `SERVICE_ACCOUNT_ACCESS_TOKEN`: Setup a service user, add a Personal Access Token and copy the secret here (see below).
 
@@ -216,7 +221,6 @@ You could create another project (eg, `Data Cube`) and grant that project to the
 You could also build out the code (PRs welcome :wink:) for this application, for example:
 
 - Create a mock `datacube-web` application and show how SSO between the portal and the application works with ZITADEL.
-- Implement a feature in the Authorization tab to assign roles directly from the customer portal.
 - Add bulk user operations for managing multiple users at once.
 - Implement user activity tracking and audit logs.
 - Add data export functionality for user grants and project access.

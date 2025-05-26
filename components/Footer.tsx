@@ -41,12 +41,19 @@ const Footer = () => {
                 <a className="hover:text-pink-600" href="https://zitadel.com">
                   ZITADEL (CAOS Ltd.)
                 </a>
-                , Lerchenfeldstrasse 3, 9014 St. Gallen, Switzerland
               </p>
-              <span className="text-gray-500 md:mr-6">{`© ${new Date().getFullYear()}`}</span>
+              <div className="flex flex-col space-y-1 text-center md:text-left">
+                <span className="text-gray-500">
+                  Four Embarcadero Center, Suite 1400
+                </span>
+                <span className="text-gray-500">
+                  San Francisco, CA 94111-4164
+                </span>
+                <span className="text-gray-500">{`Copyright © ${new Date().getFullYear()} All rights reserved.`}</span>
+              </div>
             </div>
 
-            <div className="grid grid-cols-3 gap-2 my-2">
+            <div className="grid grid-cols-3 md:grid-cols-6 gap-2 my-2">
               <a
                 className="hover:text-gray-500 dark:text-gray-400 dark:hover:text-white"
                 target="_blank"
@@ -70,6 +77,30 @@ const Footer = () => {
                 href="https://www.linkedin.com/company/zitadel/"
               >
                 <i className="text-3xl lab la-linkedin"></i>
+              </a>
+              <a
+                className="hover:text-gray-500 dark:text-gray-400 dark:hover:text-white"
+                target="_blank"
+                rel="noreferrer"
+                href="https://www.facebook.com/zitadel.social"
+              >
+                <i className="text-3xl lab la-facebook"></i>
+              </a>
+              <a
+                className="hover:text-gray-500 dark:text-gray-400 dark:hover:text-white"
+                target="_blank"
+                rel="noreferrer"
+                href="https://zitadel.com/chat"
+              >
+                <i className="text-3xl lab la-discord"></i>
+              </a>
+              <a
+                className="hover:text-gray-500 dark:text-gray-400 dark:hover:text-white"
+                target="_blank"
+                rel="noreferrer"
+                href="https://www.youtube.com/@zitadel"
+              >
+                <i className="text-3xl lab la-youtube"></i>
               </a>
             </div>
           </div>

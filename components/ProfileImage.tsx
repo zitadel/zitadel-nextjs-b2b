@@ -14,7 +14,8 @@ export default function ProfileImage({ user }: { user?: any | null }) {
     const url =
       `${process.env.PUBLIC_NEXT_ZITADEL_API}/oidc/v1/end_session?` +
       new URLSearchParams({
-        post_logout_redirect_uri: 'http://localhost:3000',
+        post_logout_redirect_uri: window.location.origin,
+        client_id: process.env.ZITADEL_CLIENT_ID
       });
 
     return router.push(url);

@@ -79,7 +79,6 @@ NEXTAUTH_URL=http://localhost:3000
 PUBLIC_NEXT_ZITADEL_API=https://{YourDomain}.zitadel.cloud
 ZITADEL_API=https://{YourDomain}.zitadel.cloud
 ORG_ID={YourOrgId}
-PROJECT_ID={YourProjectId}
 ZITADEL_CLIENT_ID={YourClientID}
 SERVICE_ACCOUNT_ACCESS_TOKEN={YourServiceAccountSecret}
 NEXTAUTH_SECRET=randomsecret
@@ -93,9 +92,7 @@ Replace the values as follows
 
 `ZITADEL_API`: URL of the Management API. The same as `PUBLIC_NEXT_ZITADEL_API`.
 
-`ORG_ID`: We will create an organization during later steps. You can find `{YourOrgId}` by selecting the `Demo-Vendor` organization in Console. `{YourOrgId}` is displayed on top of the organization detail page as "Resource Id".
-
-`PROJECT_ID`: You can find `{YourProjectId}` by clicking on "Projects" in the navigation and select the Project `Portal`. `{YourProjectId}` is displayed on the top as "Resource Id".
+`ORG_ID`: (Optional fallback) You can find `{YourOrgId}` by selecting the `Demo-Vendor` organization in Console. `{YourOrgId}` is displayed on top of the organization detail page as "Resource Id". The application now dynamically handles multiple organizations, so this is only used as a fallback when no organization is specified.
 
 `ZITADEL_CLIENT_ID`: Having the project `Portal` selected, click on the Application `portal-web`. `{YourClientID}` is displayed as a field in the OIDC configuration, labelled "Client ID" and has the format `12345678@portal`.
 
@@ -168,7 +165,7 @@ You can log out and log in with `Eric Employee` and you should only have access 
 
 To deploy your own version on Vercel, setup your instance like the description above and provide the variables in the dedicated fields for the environment.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fzitadel%2Fzitadel-nextjs-b2b&env=NEXTAUTH_SECRET,NEXTAUTH_URL,ORG_ID,PROJECT_ID,SERVICE_ACCOUNT_ACCESS_TOKEN,ZITADEL_API,PUBLIC_NEXT_ZITADEL_API,ZITADEL_CLIENT_ID,ZITADEL_CLIENT_SECRET&project-name=zitadel-b2b&repository-name=zitadel-b2b)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fzitadel%2Fzitadel-nextjs-b2b&env=NEXTAUTH_SECRET,NEXTAUTH_URL,ORG_ID,SERVICE_ACCOUNT_ACCESS_TOKEN,ZITADEL_API,PUBLIC_NEXT_ZITADEL_API,ZITADEL_CLIENT_ID,ZITADEL_CLIENT_SECRET&project-name=zitadel-b2b&repository-name=zitadel-b2b)
 
 ## What next
 

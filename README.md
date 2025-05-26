@@ -1,16 +1,58 @@
-# ZITADEL B2B Demo
+# ZITADEL NextJS B2B Demo
 
 This is a demo showcasing how you can use ZITADEL in a B2B (Business-to-Business) context, where a company is providing a customer portal to their customers:
 
 - A user of the customer should see all granted projects in the portal ("Service discovery")
-- A admin user of the customers sees a list of customer's users (could be expanded to make roles editable)
+- An admin user of the customers sees a list of customer's users and can manage user grants with role assignment
+- Users can invite new users to their organization with automatic email invitations
+- Comprehensive search functionality for finding users by name, email, or username
+- Fully responsive design optimized for desktop, tablet, and mobile devices
 
 ## What does it do?
 
-Users with `view` role can view granted projects on their organization which were granted by your organization (owning this portal application).
-Users with `admin` role can view granted projects and list users of the selected organization who are granted to use the portal application too.
+Users with `reader` role can view granted projects on their organization which were granted by your organization (owning this portal application).
+Users with `admin` role can view granted projects and manage users of the selected organization, including:
+
+- **View User Grants**: See all users who have access to granted projects with clear role indicators
+- **Real-Time Search**: Instantly find users by searching across display name, email, username, first name, last name, or preferred login name
+- **Add User Grants**: Grant project access to existing users with searchable user selection and role assignment
+- **Edit User Roles**: Modify roles assigned to users for specific projects with inline editing
+- **Remove User Grants**: Revoke project access from users with confirmation dialogs
+- **Invite New Users**: Create new users with automatic invitation emails sent via ZITADEL
+- **Mobile-First Design**: Fully responsive interface that works seamlessly on all device sizes
+- **Progressive Enhancement**: Enhanced user experience with debounced search, loading states, and optimistic updates
 
 ![app screen](./public/screenshot.png)
+
+## Key Features
+
+### 🔍 Advanced Search Functionality
+- **Real-time user search** with instant results as you type
+- **Multi-field search** across display name, email, username, first name, last name, and preferred login name
+- **Debounced input** for optimal performance with large user bases
+- **Search result counters** to show filtered results
+- **Clear search** functionality with one-click reset
+
+### 📱 Mobile-First Responsive Design
+- **Responsive grid layouts** that adapt from single column on mobile to multi-column on larger screens
+- **Touch-friendly interfaces** with properly sized buttons and touch targets
+- **Mobile navigation menu** with integrated profile management
+- **Responsive typography** that scales appropriately across device sizes
+- **Optimized user experience** for phones, tablets, and desktop computers
+
+### 👥 Enhanced User Management
+- **Searchable user selection** when adding user grants (no more scrolling through long dropdown lists)
+- **Inline role editing** directly within the user grants table
+- **User invitation system** with automatic email notifications
+- **Batch operations** for efficient user management
+- **Visual role indicators** for quick identification of user permissions
+
+### ⚡ Performance Optimizations
+- **Client-side filtering** for instant search results without server round-trips
+- **Memoized computations** to prevent unnecessary re-renders
+- **Optimistic updates** for better perceived performance
+- **Efficient state management** with proper React patterns
+- **Scalable architecture** designed to handle hundreds or thousands of users
 
 ## Step 1: Setup Vendor application and users in ZITADEL
 
@@ -48,7 +90,7 @@ To setup the needed roles for your project, navigate to your `Portal` project, a
 
 | Key    | Display Name  | Group | Description                                                            |
 | :----- | :------------ | :---- | ---------------------------------------------------------------------- |
-| admin  | Administrator |       | The administrator, allowed to read granted projects and to user grants |
+| admin  | Administrator |       | The administrator, allowed to read granted projects and manage user grants |
 | reader | Reader        |       | A user who is allowed to read his organizations granted projects only  |
 
 Now in the `General` section of the Portal project, make sure to enable `Assert Roles on Authentication`.
@@ -92,7 +134,7 @@ Replace the values as follows
 
 `ZITADEL_API`: URL of the Management API. The same as `PUBLIC_NEXT_ZITADEL_API`.
 
-`ORG_ID`: (Optional fallback) You can find `{YourOrgId}` by selecting the `Demo-Vendor` organization in Console. `{YourOrgId}` is displayed on top of the organization detail page as "Resource Id". The application now dynamically handles multiple organizations, so this is only used as a fallback when no organization is specified.
+`ORG_ID`: (Optional) You can find `{YourOrgId}` by selecting the `Demo-Vendor` organization in Console. `{YourOrgId}` is displayed on top of the organization detail page as "Resource Id". The application now dynamically handles multiple organizations, so this is only used as a fallback when no organization is specified in the user's session.
 
 `ZITADEL_CLIENT_ID`: Having the project `Portal` selected, click on the Application `portal-web`. `{YourClientID}` is displayed as a field in the OIDC configuration, labelled "Client ID" and has the format `12345678@portal`.
 
@@ -175,4 +217,34 @@ You could also build out the code (PRs welcome :wink:) for this application, for
 
 - Create a mock `datacube-web` application and show how SSO between the portal and the application works with ZITADEL.
 - Implement a feature in the Authorization tab to assign roles directly from the customer portal.
-- ...
+- Add bulk user operations for managing multiple users at once.
+- Implement user activity tracking and audit logs.
+- Add data export functionality for user grants and project access.
+
+## Technical Implementation
+
+### Search Architecture
+The application implements a scalable search solution that:
+- Fetches all user grants on initial load (up to 1000 users by default)
+- Performs client-side filtering using `useMemo` for optimal performance
+- Uses debounced input (300ms delay) to prevent excessive filtering during typing
+- Searches across multiple user properties simultaneously
+
+### Responsive Design Patterns
+The UI uses modern CSS Grid and Flexbox patterns with Tailwind CSS:
+- CSS Grid with responsive column counts: `grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4`
+- Mobile-first approach with progressive enhancement
+- Responsive text sizing: `text-sm sm:text-base lg:text-lg`
+- Adaptive spacing and padding for different screen sizes
+
+### State Management
+- React hooks (`useState`, `useEffect`, `useMemo`) for efficient state management
+- Proper cleanup and reset patterns for modal dialogs
+- Optimistic UI updates for better user experience
+- Centralized loading states and error handling
+
+### API Integration
+- ZITADEL Management API integration for user and grant operations
+- Service account authentication for backend operations
+- Email invitation system using ZITADEL's user creation API
+- Proper error handling and user feedback for all operations

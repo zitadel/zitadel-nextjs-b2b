@@ -475,7 +475,7 @@ export default function UserGrantTable() {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <div className="fixed inset-0 bg-black bg-opacity-25" />
+            <div className="fixed inset-0 bg-black bg-opacity-50" />
           </Transition.Child>
 
           <div className="fixed inset-0 overflow-y-auto">
@@ -489,17 +489,20 @@ export default function UserGrantTable() {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white dark:bg-gray-800 p-4 sm:p-6 text-left align-middle shadow-xl transition-all">
-                  <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900 dark:text-white">
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-zitadelblue-700 border border-zitadelblue-600 p-4 sm:p-6 text-left align-middle shadow-xl transition-all">
+                  <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-white">
                     {selectedGrant?.roleKeys && selectedGrant.roleKeys.length > 0 ? 'Edit User Roles' : 'Add User Roles'}
                   </Dialog.Title>
                   <div className="mt-2">
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                    <p className="text-sm text-gray-300">
                       {selectedGrant?.displayName} - {selectedGrant?.projectName}
                     </p>
                   </div>
 
                   <div className="mt-4">
+                    <label className="block text-sm font-medium text-gray-200 mb-2">
+                      Select Roles:
+                    </label>
                     <div className="space-y-2">
                       {availableRoles.map((role) => (
                         <label key={role} className="flex items-center">
@@ -513,9 +516,9 @@ export default function UserGrantTable() {
                                 setEditRoles(editRoles.filter((r) => r !== role));
                               }
                             }}
-                            className="mr-2"
+                            className="mr-2 rounded border-zitadelblue-600 bg-zitadelblue-800 text-zitadelaccent-500 focus:ring-zitadelaccent-500"
                           />
-                          <span className="text-gray-900 dark:text-white">{role}</span>
+                          <span className="text-white">{role}</span>
                         </label>
                       ))}
                     </div>
@@ -524,14 +527,14 @@ export default function UserGrantTable() {
                   <div className="mt-4 flex flex-col sm:flex-row justify-end gap-2 sm:space-x-2 sm:gap-0">
                     <button
                       type="button"
-                      className="order-2 sm:order-1 inline-flex justify-center rounded-md border border-transparent bg-gray-100 px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2"
+                      className="order-2 sm:order-1 inline-flex justify-center rounded-md border border-zitadelblue-500 bg-zitadelblue-600 px-4 py-2 text-sm font-medium text-gray-200 hover:bg-zitadelblue-500 focus:outline-none focus:ring-2 focus:ring-zitadelaccent-500 focus:ring-offset-2 focus:ring-offset-zitadelblue-700"
                       onClick={() => setEditModalOpen(false)}
                     >
                       Cancel
                     </button>
                     <button
                       type="button"
-                      className="order-1 sm:order-2 inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                      className="order-1 sm:order-2 inline-flex justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-zitadelblue-700"
                       onClick={updateUserGrant}
                     >
                       Update
@@ -556,7 +559,7 @@ export default function UserGrantTable() {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <div className="fixed inset-0 bg-black bg-opacity-25" />
+            <div className="fixed inset-0 bg-black bg-opacity-50" />
           </Transition.Child>
 
           <div className="fixed inset-0 overflow-y-auto">
@@ -570,12 +573,12 @@ export default function UserGrantTable() {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white dark:bg-gray-800 p-4 sm:p-6 text-left align-middle shadow-xl transition-all">
-                  <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900 dark:text-white">
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-zitadelblue-700 border border-zitadelblue-600 p-4 sm:p-6 text-left align-middle shadow-xl transition-all">
+                  <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-white">
                     Remove User Grant
                   </Dialog.Title>
                   <div className="mt-2">
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                    <p className="text-sm text-gray-300">
                       Are you sure you want to remove the grant for {selectedGrant?.displayName} from {selectedGrant?.projectName}?
                     </p>
                   </div>
@@ -583,14 +586,14 @@ export default function UserGrantTable() {
                   <div className="mt-4 flex flex-col sm:flex-row justify-end gap-2 sm:space-x-2 sm:gap-0">
                     <button
                       type="button"
-                      className="inline-flex justify-center rounded-md border border-transparent bg-gray-100 px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2"
+                      className="inline-flex justify-center rounded-md border border-zitadelblue-500 bg-zitadelblue-600 px-4 py-2 text-sm font-medium text-gray-200 hover:bg-zitadelblue-500 focus:outline-none focus:ring-2 focus:ring-zitadelaccent-500 focus:ring-offset-2 focus:ring-offset-zitadelblue-700"
                       onClick={() => setDeleteModalOpen(false)}
                     >
                       Cancel
                     </button>
                     <button
                       type="button"
-                      className="inline-flex justify-center rounded-md border border-transparent bg-red-100 px-4 py-2 text-sm font-medium text-red-900 hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
+                      className="inline-flex justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-zitadelblue-700"
                       onClick={deleteUserGrant}
                     >
                       Remove
@@ -618,7 +621,7 @@ export default function UserGrantTable() {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <div className="fixed inset-0 bg-black bg-opacity-25" />
+            <div className="fixed inset-0 bg-black bg-opacity-50" />
           </Transition.Child>
 
           <div className="fixed inset-0 overflow-y-auto">
@@ -632,19 +635,19 @@ export default function UserGrantTable() {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white dark:bg-gray-800 p-4 sm:p-6 text-left align-middle shadow-xl transition-all">
-                  <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900 dark:text-white">
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-zitadelblue-700 border border-zitadelblue-600 p-4 sm:p-6 text-left align-middle shadow-xl transition-all">
+                  <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-white">
                     Add User Grant
                   </Dialog.Title>
                   <div className="mt-2">
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                    <p className="text-sm text-gray-300">
                       Add a user to {selectedProject?.name}
                     </p>
                   </div>
 
                   {/* Error Message Display */}
                   {addGrantError && (
-                    <div className="mt-3 p-3 rounded-md bg-red-50 border border-red-200 dark:bg-red-900/20 dark:border-red-800">
+                    <div className="mt-3 p-3 rounded-md bg-red-900/30 border border-red-700">
                       <div className="flex">
                         <div className="flex-shrink-0">
                           <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
@@ -652,7 +655,7 @@ export default function UserGrantTable() {
                           </svg>
                         </div>
                         <div className="ml-3">
-                          <p className="text-sm text-red-800 dark:text-red-200">
+                          <p className="text-sm text-red-200">
                             {addGrantError}
                           </p>
                         </div>
@@ -661,7 +664,7 @@ export default function UserGrantTable() {
                   )}
 
                   <div className="mt-4">
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    <label className="block text-sm font-medium text-gray-200 mb-2">
                       Search for User:
                     </label>
                     <div className="relative">
@@ -679,13 +682,13 @@ export default function UserGrantTable() {
                             setAddGrantError('');
                           }
                         }}
-                        className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                        className="w-full pl-10 pr-4 py-2 border border-zitadelblue-600 rounded-md shadow-sm bg-zitadelblue-800 text-white placeholder-gray-400 focus:ring-2 focus:ring-zitadelaccent-500 focus:border-zitadelaccent-500 text-sm"
                       />
                     </div>
                     
                     {/* Search Results */}
                     {userSearchQuery.trim().length >= 2 && (
-                      <div className="mt-2 max-h-48 overflow-y-auto border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700">
+                      <div className="mt-2 max-h-48 overflow-y-auto border border-zitadelblue-600 rounded-md bg-zitadelblue-800">
                         {filteredOrgUsers.length > 0 ? (
                           <div className="py-1">
                             {filteredOrgUsers.map((user: any) => (
@@ -699,17 +702,17 @@ export default function UserGrantTable() {
                                     setAddGrantError('');
                                   }
                                 }}
-                                className={`w-full text-left px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors ${
+                                className={`w-full text-left px-3 py-2 hover:bg-zitadelblue-600 transition-colors ${
                                   selectedUserId === user.userId 
-                                    ? 'bg-blue-50 dark:bg-blue-900 text-blue-900 dark:text-blue-100' 
-                                    : 'text-gray-900 dark:text-white'
+                                    ? 'bg-zitadelaccent-500/20 text-zitadelaccent-200' 
+                                    : 'text-white'
                                 }`}
                               >
                                 <div className="flex flex-col">
                                   <span className="font-medium text-sm">
                                     {user.human?.profile?.displayName || user.username || 'Unknown User'}
                                   </span>
-                                  <span className="text-xs text-gray-500 dark:text-gray-400">
+                                  <span className="text-xs text-gray-400">
                                     {user.human?.email?.email || 'No email'} • {user.username || 'No username'}
                                   </span>
                                 </div>
@@ -717,7 +720,7 @@ export default function UserGrantTable() {
                             ))}
                           </div>
                         ) : (
-                          <div className="py-2 px-3 text-sm text-gray-500 dark:text-gray-400">
+                          <div className="py-2 px-3 text-sm text-gray-400">
                             No users found matching "{userSearchQuery}"
                           </div>
                         )}
@@ -726,9 +729,9 @@ export default function UserGrantTable() {
                     
                     {/* Selected User Display */}
                     {selectedUserId && userSearchQuery.trim() && (
-                      <div className="mt-2 p-2 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-md">
+                      <div className="mt-2 p-2 bg-zitadelaccent-500/20 border border-zitadelaccent-500 rounded-md">
                         <div className="flex items-center justify-between">
-                          <span className="text-sm text-blue-900 dark:text-blue-100 font-medium">
+                          <span className="text-sm text-zitadelaccent-200 font-medium">
                             Selected: {userSearchQuery}
                           </span>
                           <button
@@ -737,7 +740,7 @@ export default function UserGrantTable() {
                               setSelectedUserId('');
                               setUserSearchQuery('');
                             }}
-                            className="text-blue-700 dark:text-blue-300 hover:text-blue-500 ml-2"
+                            className="text-zitadelaccent-300 hover:text-zitadelaccent-100 ml-2"
                           >
                             <XIcon className="h-4 w-4" />
                           </button>
@@ -746,14 +749,14 @@ export default function UserGrantTable() {
                     )}
                     
                     {userSearchQuery.trim().length > 0 && userSearchQuery.trim().length < 2 && (
-                      <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                      <p className="mt-1 text-xs text-gray-400">
                         Type at least 2 characters to search for users
                       </p>
                     )}
                   </div>
 
                   <div className="mt-4">
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    <label className="block text-sm font-medium text-gray-200 mb-2">
                       Select Roles:
                     </label>
                     <div className="space-y-2">
@@ -774,9 +777,9 @@ export default function UserGrantTable() {
                                 setEditRoles(editRoles.filter((r) => r !== role));
                               }
                             }}
-                            className="mr-2"
+                            className="mr-2 rounded border-zitadelblue-600 bg-zitadelblue-800 text-zitadelaccent-500 focus:ring-zitadelaccent-500"
                           />
-                          <span className="text-gray-900 dark:text-white">{role}</span>
+                          <span className="text-white">{role}</span>
                         </label>
                       ))}
                     </div>
@@ -785,7 +788,7 @@ export default function UserGrantTable() {
                   <div className="mt-4 flex flex-col sm:flex-row justify-end gap-2 sm:space-x-2 sm:gap-0">
                     <button
                       type="button"
-                      className="order-2 sm:order-1 inline-flex justify-center rounded-md border border-transparent bg-gray-100 px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2"
+                      className="order-2 sm:order-1 inline-flex justify-center rounded-md border border-zitadelblue-500 bg-zitadelblue-600 px-4 py-2 text-sm font-medium text-gray-200 hover:bg-zitadelblue-500 focus:outline-none focus:ring-2 focus:ring-zitadelaccent-500 focus:ring-offset-2 focus:ring-offset-zitadelblue-700"
                       onClick={() => {
                         setAddModalOpen(false);
                         setAddGrantError(''); // Clear error when cancelled
@@ -795,7 +798,7 @@ export default function UserGrantTable() {
                     </button>
                     <button
                       type="button"
-                      className="order-1 sm:order-2 inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                      className="order-1 sm:order-2 inline-flex justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-zitadelblue-700"
                       onClick={() => {
                         if (selectedUserId) {
                           addUserGrant(selectedUserId);

@@ -143,7 +143,7 @@ export default function InviteUserModal({ isOpen, onClose, onUserCreated }: Invi
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-black bg-opacity-25" />
+          <div className="fixed inset-0 bg-black bg-opacity-50" />
         </Transition.Child>
 
         <div className="fixed inset-0 overflow-y-auto">
@@ -157,28 +157,28 @@ export default function InviteUserModal({ isOpen, onClose, onUserCreated }: Invi
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white dark:bg-gray-800 p-4 sm:p-6 text-left align-middle shadow-xl transition-all">
+              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-zitadelblue-700 border border-zitadelblue-600 p-4 sm:p-6 text-left align-middle shadow-xl transition-all">
                 <div className="flex justify-between items-start mb-4">
-                  <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900 dark:text-white pr-4">
+                  <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-white pr-4">
                     Invite New Team Member
                   </Dialog.Title>
                   <button
                     onClick={handleClose}
-                    className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 flex-shrink-0 p-1"
+                    className="text-gray-400 hover:text-gray-200 flex-shrink-0 p-1"
                   >
                     <XIcon className="w-5 h-5" />
                   </button>
                 </div>
 
                 <div className="mt-2">
-                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                  <p className="text-sm text-gray-300">
                     Add a new user to {org?.name || 'the organization'}
                   </p>
                 </div>
 
                 {/* Error Message Display */}
                 {error && (
-                  <div className="mt-3 p-3 rounded-md bg-red-50 border border-red-200 dark:bg-red-900/20 dark:border-red-800">
+                  <div className="mt-3 p-3 rounded-md bg-red-900/30 border border-red-700">
                     <div className="flex">
                       <div className="flex-shrink-0">
                         <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
@@ -186,7 +186,7 @@ export default function InviteUserModal({ isOpen, onClose, onUserCreated }: Invi
                         </svg>
                       </div>
                       <div className="ml-3">
-                        <p className="text-sm text-red-800 dark:text-red-200">
+                        <p className="text-sm text-red-200">
                           {error}
                         </p>
                       </div>
@@ -197,7 +197,7 @@ export default function InviteUserModal({ isOpen, onClose, onUserCreated }: Invi
                 <form onSubmit={handleSubmit} className="mt-4 space-y-3 sm:space-y-4">
                   {/* Username */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    <label className="block text-sm font-medium text-gray-200 mb-1">
                       Username *
                     </label>
                     <input
@@ -205,7 +205,7 @@ export default function InviteUserModal({ isOpen, onClose, onUserCreated }: Invi
                       name="username"
                       value={formData.username}
                       onChange={handleInputChange}
-                      className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white text-sm sm:text-base"
+                      className="w-full rounded-md border-zitadelblue-600 bg-zitadelblue-800 text-white shadow-sm focus:border-zitadelaccent-500 focus:ring-zitadelaccent-500 text-sm sm:text-base placeholder-gray-400"
                       placeholder="e.g., john-doe"
                       required
                     />
@@ -213,7 +213,7 @@ export default function InviteUserModal({ isOpen, onClose, onUserCreated }: Invi
 
                   {/* Given Name */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    <label className="block text-sm font-medium text-gray-200 mb-1">
                       Given Name *
                     </label>
                     <input
@@ -221,7 +221,7 @@ export default function InviteUserModal({ isOpen, onClose, onUserCreated }: Invi
                       name="givenName"
                       value={formData.givenName}
                       onChange={handleInputChange}
-                      className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white text-sm sm:text-base"
+                      className="w-full rounded-md border-zitadelblue-600 bg-zitadelblue-800 text-white shadow-sm focus:border-zitadelaccent-500 focus:ring-zitadelaccent-500 text-sm sm:text-base placeholder-gray-400"
                       placeholder="e.g., John"
                       required
                     />
@@ -229,7 +229,7 @@ export default function InviteUserModal({ isOpen, onClose, onUserCreated }: Invi
 
                   {/* Family Name */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    <label className="block text-sm font-medium text-gray-200 mb-1">
                       Family Name *
                     </label>
                     <input
@@ -237,7 +237,7 @@ export default function InviteUserModal({ isOpen, onClose, onUserCreated }: Invi
                       name="familyName"
                       value={formData.familyName}
                       onChange={handleInputChange}
-                      className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white text-sm sm:text-base"
+                      className="w-full rounded-md border-zitadelblue-600 bg-zitadelblue-800 text-white shadow-sm focus:border-zitadelaccent-500 focus:ring-zitadelaccent-500 text-sm sm:text-base placeholder-gray-400"
                       placeholder="e.g., Doe"
                       required
                     />
@@ -245,7 +245,7 @@ export default function InviteUserModal({ isOpen, onClose, onUserCreated }: Invi
 
                   {/* Email */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    <label className="block text-sm font-medium text-gray-200 mb-1">
                       Email Address *
                     </label>
                     <input
@@ -253,7 +253,7 @@ export default function InviteUserModal({ isOpen, onClose, onUserCreated }: Invi
                       name="email"
                       value={formData.email}
                       onChange={handleInputChange}
-                      className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white text-sm sm:text-base"
+                      className="w-full rounded-md border-zitadelblue-600 bg-zitadelblue-800 text-white shadow-sm focus:border-zitadelaccent-500 focus:ring-zitadelaccent-500 text-sm sm:text-base placeholder-gray-400"
                       placeholder="e.g., john.doe@company.com"
                       required
                     />
@@ -261,9 +261,9 @@ export default function InviteUserModal({ isOpen, onClose, onUserCreated }: Invi
 
                   {/* Display Name Preview */}
                   {formData.givenName && formData.familyName && (
-                    <div className="p-3 bg-gray-50 dark:bg-gray-700 rounded-md">
-                      <p className="text-sm text-gray-600 dark:text-gray-400">
-                        Display Name: <span className="font-medium">{formData.givenName} {formData.familyName}</span>
+                    <div className="p-3 bg-zitadelblue-800 border border-zitadelblue-600 rounded-md">
+                      <p className="text-sm text-gray-300">
+                        Display Name: <span className="font-medium text-white">{formData.givenName} {formData.familyName}</span>
                       </p>
                     </div>
                   )}
@@ -272,14 +272,14 @@ export default function InviteUserModal({ isOpen, onClose, onUserCreated }: Invi
                     <button
                       type="button"
                       onClick={handleClose}
-                      className="order-2 sm:order-1 inline-flex justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:bg-gray-600 dark:border-gray-500 dark:text-white dark:hover:bg-gray-500"
+                      className="order-2 sm:order-1 inline-flex justify-center rounded-md border border-zitadelblue-500 bg-zitadelblue-600 px-4 py-2 text-sm font-medium text-gray-200 shadow-sm hover:bg-zitadelblue-500 focus:outline-none focus:ring-2 focus:ring-zitadelaccent-500 focus:ring-offset-2 focus:ring-offset-zitadelblue-700"
                       disabled={isLoading}
                     >
                       Cancel
                     </button>
                     <button
                       type="submit"
-                      className="order-1 sm:order-2 inline-flex justify-center items-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="order-1 sm:order-2 inline-flex justify-center items-center rounded-md border border-transparent bg-green-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-zitadelblue-700 disabled:opacity-50 disabled:cursor-not-allowed"
                       disabled={isLoading}
                     >
                       {isLoading ? (

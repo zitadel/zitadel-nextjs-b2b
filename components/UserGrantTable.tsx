@@ -13,6 +13,7 @@ export default function UserGrantTable() {
   const [selectedProject, setSelectedProject] = useState<any>(null);
   const [editRoles, setEditRoles] = useState<string[]>([]);
   const [availableRoles, setAvailableRoles] = useState<string[]>([]);
+  const [addGrantError, setAddGrantError] = useState<string>('');
 
   // Get the current organization from the store
   const org = orgStore((state) => (state as any).org);
@@ -85,12 +86,6 @@ export default function UserGrantTable() {
   }, {});
 
   const handleEditGrant = async (grant: any) => {
-    // Check if the grant has roleKeys - some grants might not be editable
-    if (!grant.roleKeys || grant.roleKeys.length === 0) {
-      alert('This user grant has no roles assigned and cannot be edited. You can only delete it.');
-      return;
-    }
-    
     setSelectedGrant(grant);
     setEditRoles(grant.roleKeys || []);
     
@@ -108,6 +103,7 @@ export default function UserGrantTable() {
   const handleAddGrant = async (projectId: string, projectGrantId: string, projectName: string) => {
     setSelectedProject({ id: projectId, grantId: projectGrantId, name: projectName });
     setEditRoles([]);
+    setAddGrantError(''); // Clear any previous error
     
     // Fetch available roles for this project
     await fetchProjectRoles(projectId);
@@ -167,9 +163,33 @@ export default function UserGrantTable() {
   const addUserGrant = async (userId: string) => {
     if (!selectedProject) return;
     
+    // Clear any previous error
+    setAddGrantError('');
+    
+    // Validate required fields
+    if (!userId) {
+      setAddGrantError('Please select a user.');
+      return;
+    }
+    
+    if (editRoles.length === 0) {
+      setAddGrantError('Please select at least one role.');
+      return;
+    }
+    
+    // Check if user already has a grant for this project
+    const existingGrant = usergrants?.find(
+      (grant: any) => grant.userId === userId && grant.projectId === selectedProject.id
+    );
+    
+    if (existingGrant) {
+      setAddGrantError(`User already has a grant for project "${selectedProject.name}". You can edit the existing grant instead.`);
+      return;
+    }
+    
     const session = await getSession() as any;
     try {
-      await fetch('/api/usergrants/add', {
+      const response = await fetch('/api/usergrants/add', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -183,10 +203,20 @@ export default function UserGrantTable() {
           orgId: org?.id, // Pass the current organization ID
         }),
       });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        setAddGrantError(`Error adding user grant: ${errorData.error || 'Unknown error'}`);
+        return;
+      }
+      
       mutate(`/api/usergrants?orgId=${org.id}`);
       setAddModalOpen(false);
+      setAddGrantError(''); // Clear error on success
+      setEditRoles([]); // Reset roles selection
     } catch (error) {
       console.error('Error adding user grant:', error);
+      setAddGrantError('Error adding user grant. Please try again.');
     }
   };
 
@@ -244,19 +274,13 @@ export default function UserGrantTable() {
                         </td>
                         <td className="px-5 py-5 border-b border-gray-600 text-sm group">
                           <div className="flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                            {user.roleKeys && user.roleKeys.length > 0 ? (
-                              <button
-                                onClick={() => handleEditGrant(user)}
-                                className="p-1 text-blue-400 hover:text-blue-300"
-                                title="Edit roles"
-                              >
-                                <PencilIcon className="w-4 h-4" />
-                              </button>
-                            ) : (
-                              <span className="p-1 text-gray-500" title="Cannot edit - no roles assigned">
-                                <PencilIcon className="w-4 h-4 opacity-30" />
-                              </span>
-                            )}
+                            <button
+                              onClick={() => handleEditGrant(user)}
+                              className="p-1 text-blue-400 hover:text-blue-300"
+                              title={user.roleKeys && user.roleKeys.length > 0 ? "Edit roles" : "Add roles"}
+                            >
+                              <PencilIcon className="w-4 h-4" />
+                            </button>
                             <button
                               onClick={() => handleDeleteGrant(user)}
                               className="p-1 text-red-400 hover:text-red-300"
@@ -310,7 +334,7 @@ export default function UserGrantTable() {
               >
                 <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white dark:bg-gray-800 p-6 text-left align-middle shadow-xl transition-all">
                   <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900 dark:text-white">
-                    Edit User Roles
+                    {selectedGrant?.roleKeys && selectedGrant.roleKeys.length > 0 ? 'Edit User Roles' : 'Add User Roles'}
                   </Dialog.Title>
                   <div className="mt-2">
                     <p className="text-sm text-gray-500 dark:text-gray-400">
@@ -424,7 +448,10 @@ export default function UserGrantTable() {
 
       {/* Add User Grant Modal */}
       <Transition appear show={addModalOpen} as={Fragment}>
-        <Dialog as="div" className="relative z-10" onClose={() => setAddModalOpen(false)}>
+        <Dialog as="div" className="relative z-10" onClose={() => {
+          setAddModalOpen(false);
+          setAddGrantError(''); // Clear error when modal is closed
+        }}>
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -458,6 +485,24 @@ export default function UserGrantTable() {
                     </p>
                   </div>
 
+                  {/* Error Message Display */}
+                  {addGrantError && (
+                    <div className="mt-3 p-3 rounded-md bg-red-50 border border-red-200 dark:bg-red-900/20 dark:border-red-800">
+                      <div className="flex">
+                        <div className="flex-shrink-0">
+                          <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                        <div className="ml-3">
+                          <p className="text-sm text-red-800 dark:text-red-200">
+                            {addGrantError}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
                   <div className="mt-4">
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       Select User:
@@ -465,6 +510,12 @@ export default function UserGrantTable() {
                     <select
                       id="user-select"
                       className="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                      onChange={() => {
+                        // Clear error when user makes a selection
+                        if (addGrantError) {
+                          setAddGrantError('');
+                        }
+                      }}
                     >
                       <option value="">Choose a user...</option>
                       {orgUsers?.map((user: any) => (
@@ -486,6 +537,11 @@ export default function UserGrantTable() {
                             type="checkbox"
                             checked={editRoles.includes(role)}
                             onChange={(e) => {
+                              // Clear error when roles are modified
+                              if (addGrantError) {
+                                setAddGrantError('');
+                              }
+                              
                               if (e.target.checked) {
                                 setEditRoles([...editRoles, role]);
                               } else {
@@ -504,7 +560,10 @@ export default function UserGrantTable() {
                     <button
                       type="button"
                       className="inline-flex justify-center rounded-md border border-transparent bg-gray-100 px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-500 focus-visible:ring-offset-2"
-                      onClick={() => setAddModalOpen(false)}
+                      onClick={() => {
+                        setAddModalOpen(false);
+                        setAddGrantError(''); // Clear error when cancelled
+                      }}
                     >
                       Cancel
                     </button>

@@ -14,15 +14,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const token = process.env.SERVICE_ACCOUNT_ACCESS_TOKEN;
   const url = `${process.env.ZITADEL_API}/management/v1/users/${userId}/grants/${grantId}`;
 
-  console.log(
-    new Date().toLocaleString(),
-    '\n',
-    `call to ${url} to update user grant ${grantId} for user ${userId} with roles:`,
-    roles,
-    '\n',
-    `Using org context: ${orgId}`
-  );
-
   try {
     const response = await fetch(url, {
       method: 'PUT',
@@ -38,15 +29,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     
     if (!response.ok) {
       const errorText = await response.text();
-      console.error(`Error response (${response.status}):`, errorText);
       return res.status(response.status).json({ error: errorText });
     }
     
     const data = await response.json();
     res.status(200).json(data);
   } catch (e) {
-    console.error('Error updating user grant:', e);
-    console.error('Error details:', e.message);
     res.status(500).json({ error: e.message });
   }
 }

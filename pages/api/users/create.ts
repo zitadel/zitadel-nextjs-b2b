@@ -66,6 +66,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           },
           body: JSON.stringify({
             sendCode: {
+              urlTemplate: `${process.env.NEXTAUTH_URL}/api/users/invite?userID={{.UserID}}&code={{.Code}}&orgID={{.OrgID}}`,
               applicationName: "Portal Web"
             }
           }),

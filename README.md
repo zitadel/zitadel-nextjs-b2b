@@ -96,10 +96,31 @@ To setup the needed roles for your project, navigate to your `Portal` project, a
 Now in the `General` section of the Portal project, make sure to enable `Assert Roles on Authentication`.
 This makes sure that roles, which is used by the application to enable UI components, are set in your OIDC ID Token.
 
+## Step 2: Create a customer organization
+
+### Customer organization
+
+Create a new organization in Console. Easiest way is to use the organization dropdown on the top left.
+Let's call this new organization `Demo-Customer`.
+
+### Users
+
+Now switch back to the organization `Demo-Customer` and [create a new user](https://zitadel.com/docs/guides/manage/user/reg-create-user) in this organization.
+Let's call the first user `Alice Admin`. Create a second user called `Eric Employee`.
+
+### Manager Role
+
+We want to enable Alice to assign roles to users in her organization in a self-service manner.
+To make this happen, we need give Alice an [Manager Role](https://zitadel.com/docs/concepts/structure/managers) within the Organization `Demo-Customer`.
+
+Still in the organization `Demo-Customer`, navigate to Organization. Click on the plus on the top right and give `Alice Admin` the Manager Role `Org Owner`.
+
+Login with your user on the customer organization to validate the setup.
+
 ### Service User
 
 To make the application work you need a service user which loads granted-projects and user-grants for you.
-In the B2B-Demo organization, navigate to `Users` in navigation of Console, click on `Service Users` and create a new user.
+In the `Demo-Vendor` organization on the Console, navigate to `Users`, click on `Service Users` and create a new user.
 Let's set its username to `nextjs` and its name to `NextJS`. Then press `create`.
 
 On the detail page of that user, navigate to "Personal Access Tokens" and add a new entry, set an optional expiration date.
@@ -109,11 +130,11 @@ Copy the generated Token as you will need this in your environment configuration
 Go back to the `Portal` project and add the Service User as Manager (top right).
 Make sure to select `Project Owner Viewer` as the management role.
 
-To show granted projects, go to the `Demo-Vendor` organization and add the Service User as `Org Project Permission Editor` Manager.
+To show granted projects, still in the `Demo-Vendor` organization, add the Service User as `Org Project Permission Editor` Manager.
 
 To manage user grants and invite new users, go to the `Demo-Customer` organization and add the Service User as `Org User Manager` Manager.
 
-## Step 2: Configuration
+## Step 3: Configuration
 
 Now clone this project and navigate to its root folder.
 Create a file `.env.local` and copy paste the following:
@@ -143,9 +164,9 @@ Replace the values as follows
 
 `ZITADEL_CLIENT_SECRET`: You should have saved the Client Secret when creating the `portal-web` application. Otherwise, having the project `Portal` selected, click on the Application `portal-web`. There, clicking on the "Actions" dropdown menu, you can Regenerate the Client Secret for the application.
 
-`SERVICE_ACCOUNT_ACCESS_TOKEN`: Setup a service user, add a Personal Access Token and copy the secret here (see below).
+`SERVICE_ACCOUNT_ACCESS_TOKEN`: From the Service User created in step 2, you should have saved the Personal Access Token. Add it here.
 
-## Step 3: Install and Run
+## Step 4: Install and Run
 
 To run this sample locally you need to install dependencies first.
 
@@ -165,32 +186,11 @@ yarn dev
 
 and open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## Step 4: Create a customer organization
-
-### Customer organization
-
-Create a new organization in Console. Easiest way is to use the organization dropdown on the top left.
-Let's call this new organization `Demo-Customer`.
-
-### Users
-
-Now switch back to the organization `Demo-Customer` and [create a new user](https://zitadel.com/docs/guides/manage/user/reg-create-user) in this organization.
-Let's call the first user `Alice Admin`. Create a second user called `Eric Employee`.
-
-### Manager Role
-
-We want to enable Alice to assign roles to users in her organization in a self-service manner.
-To make this happen, we need give Alice an [Manager Role](https://zitadel.com/docs/concepts/structure/managers) within the Organization `Demo-Customer`.
-
-Still in the organization `Demo-Customer`, navigate to Organization. Click on the plus on the top right and give `Alice Admin` the Manager Role `Org Owner`.
-
-Login with your user on the customer organization to validate the setup.
-
 ## Step 5: Create a project grant
 
 ### Organization Grant
 
-Switch to the `Demo-Vendor` organization, select Projects in the navigation, and click on `Portal` and then `Grants`.
+Go to the `Demo-Vendor` organization, select Projects in the navigation, and click on `Portal` and then `Grants`.
 [Grant all roles of the Project](https://zitadel.com/docs/guides/manage/console/projects#grant-a-project) to the organization `demo-customer.{YourDomain}.zitadel.cloud`.
 
 ### Authorization
@@ -204,9 +204,9 @@ Give `Alice Admin` the roles `reader` and `admin`.
 
 ### Login
 
-You should be able to login to the Demo Application with `Alice Admin` and see all granted projects.
+You should be able to login to the Demo Application with `Alice Admin` and see all granted projects. And from the Manage Team tab you can see a list of users with existing grants, and can manage user grants with role assignment. You can also invite new users to the `Demo-Customer` organization with automatic email invitations. 
 
-You can log out and log in with `Eric Employee` and you should only have access to the granted projects, but not to the Authorizations tab.
+You can log out and log in with `Eric Employee` and you should only have access to the granted projects, but not to the Manage Team tab.
 
 ### Deploy to Vercel
 

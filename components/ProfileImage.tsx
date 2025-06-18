@@ -14,7 +14,8 @@ export default function ProfileImage({ user }: { user?: any | null }) {
     const url =
       `${process.env.PUBLIC_NEXT_ZITADEL_API}/oidc/v1/end_session?` +
       new URLSearchParams({
-        post_logout_redirect_uri: 'http://localhost:3000',
+        post_logout_redirect_uri: window.location.origin,
+        client_id: process.env.ZITADEL_CLIENT_ID
       });
 
     return router.push(url);
@@ -76,11 +77,11 @@ export default function ProfileImage({ user }: { user?: any | null }) {
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute w-80 right-0 mt-5 origin-top-right bg-zitadelblue-400 divide-y divide-white/10 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-          <div className="px-1 py-1 ">
-            <div className="flex flex-col items-center py-4">
-              <p>{user?.name}</p>
-              <p className="text-gray-300 text-sm">{user?.email}</p>
+        <Menu.Items className="absolute w-72 sm:w-80 right-0 mt-5 origin-top-right bg-zitadelblue-400 divide-y divide-white/10 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
+          <div className="px-1 py-1">
+            <div className="flex flex-col items-center py-3 sm:py-4 px-2">
+              <p className="text-sm sm:text-base font-medium truncate max-w-full">{user?.name}</p>
+              <p className="text-gray-300 text-xs sm:text-sm truncate max-w-full">{user?.email}</p>
             </div>
             <Menu.Item>
               {({ active }) => (
@@ -92,12 +93,12 @@ export default function ProfileImage({ user }: { user?: any | null }) {
                   rel="noreferrer"
                   className={`${
                     active ? 'bg-zitadelblue-300 text-white' : 'text-gray-300'
-                  } group flex rounded-md justify-center items-center w-full px-2 py-2 text-sm`}
+                  } group flex rounded-md justify-center items-center w-full px-2 py-2 text-xs sm:text-sm`}
                 >
                   {active ? (
-                    <PencilIcon className="w-5 h-5 mr-2" aria-hidden="true" />
+                    <PencilIcon className="w-4 h-4 sm:w-5 sm:h-5 mr-2" aria-hidden="true" />
                   ) : (
-                    <PencilIcon className="w-5 h-5 mr-2" aria-hidden="true" />
+                    <PencilIcon className="w-4 h-4 sm:w-5 sm:h-5 mr-2" aria-hidden="true" />
                   )}
                   Edit Profile
                 </a>
@@ -121,12 +122,12 @@ export default function ProfileImage({ user }: { user?: any | null }) {
                   }
                   className={`${
                     active ? 'bg-zitadelblue-300 text-white' : 'text-gray-300'
-                  } rounded-md group flex justify-center items-center w-full px-2 py-2 text-sm`}
+                  } rounded-md group flex justify-center items-center w-full px-2 py-2 text-xs sm:text-sm`}
                 >
                   {active ? (
-                    <PlusIcon className="w-5 h-5 mr-2" aria-hidden="true" />
+                    <PlusIcon className="w-4 h-4 sm:w-5 sm:h-5 mr-2" aria-hidden="true" />
                   ) : (
-                    <PlusIcon className="w-5 h-5 mr-2" aria-hidden="true" />
+                    <PlusIcon className="w-4 h-4 sm:w-5 sm:h-5 mr-2" aria-hidden="true" />
                   )}
                   Add other user
                 </button>
@@ -145,16 +146,16 @@ export default function ProfileImage({ user }: { user?: any | null }) {
                         onClick={() => signInWithHint(session)}
                         className={`${
                           active ? 'bg-zitadelblue-300 text-white' : 'text-gray-300'
-                        } group flex rounded-md items-center w-full px-2 py-2 text-sm`}
+                        } group flex rounded-md items-center w-full px-2 py-2 text-xs sm:text-sm`}
                       >
                         <div className="mr-4">
                           <Avatar size={AvatarSize.SMALL} loginName={session.loginName} name={session.displayName}></Avatar>
                         </div>
-                        <div className="flex flex-col justify-start">
-                          <span className="text-left">{session.displayName}</span>
-                          <span className="text-left text-sm">{session.userName}</span>
+                        <div className="flex flex-col justify-start min-w-0 flex-1">
+                          <span className="text-left truncate">{session.displayName}</span>
+                          <span className="text-left text-xs sm:text-sm truncate">{session.userName}</span>
                           <span
-                            className={`text-left text-sm ${
+                            className={`text-left text-xs sm:text-sm ${
                               session.authState === 'SESSION_STATE_ACTIVE' ? 'text-green-500' : 'text-red-500'
                             }`}
                           >
@@ -174,12 +175,12 @@ export default function ProfileImage({ user }: { user?: any | null }) {
                   onClick={() => logout()}
                   className={`${
                     active ? 'bg-zitadelaccent-800  text-white' : 'text-gray-300'
-                  } group flex rounded-md hover:bg-red-500/20 hover:text-red-500 transition-all justify-center items-center w-full px-2 py-2 text-sm`}
+                  } group flex rounded-md hover:bg-red-500/20 hover:text-red-500 transition-all justify-center items-center w-full px-2 py-2 text-xs sm:text-sm`}
                 >
                   {active ? (
-                    <LogoutIcon className="w-5 h-5 mr-2 text-violet-400" aria-hidden="true" />
+                    <LogoutIcon className="w-4 h-4 sm:w-5 sm:h-5 mr-2 text-violet-400" aria-hidden="true" />
                   ) : (
-                    <LogoutIcon className="w-5 h-5 mr-2 text-violet-400" aria-hidden="true" />
+                    <LogoutIcon className="w-4 h-4 sm:w-5 sm:h-5 mr-2 text-violet-400" aria-hidden="true" />
                   )}
                   Logout all users
                 </button>

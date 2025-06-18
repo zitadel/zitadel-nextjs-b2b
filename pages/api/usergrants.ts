@@ -1,121 +1,88 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-
 import { handleFetchErrors } from '../../lib/middleware';
-import { getUserInfo } from './userinfo';
-import { authOptions } from './auth/[...nextauth]';
 import { getServerSession } from 'next-auth';
+import { authOptions } from './auth/[...nextauth]';
 
-function getUserGrants(orgId: string, accessToken: string, role: string): Promise<any> {
-  return getUserInfo(accessToken)
-    .then((userinfo) => {
-      const scope = 'urn:zitadel:iam:org:project:roles';
-      return userinfo[scope];
-    })
-    .then((roles) => roles[role] && roles[role][orgId])
-    .then((isAllowed) => {
-      if (isAllowed) {
-        const token = process.env.SERVICE_ACCOUNT_ACCESS_TOKEN;
-        const request = `${process.env.ZITADEL_API}/management/v1/users/grants/_search`;
+async function getUserGrants(accessToken: string, orgId?: string, limit?: number, offset?: number): Promise<any> {
+  const token = process.env.SERVICE_ACCOUNT_ACCESS_TOKEN;
+  const targetOrgId = orgId || process.env.ORG_ID;
+  const request = `${process.env.ZITADEL_API}/management/v1/users/grants/_search`;
 
-        const logHeaders = JSON.stringify({
-          'x-zitadel-org': process.env.ORG_ID,
-          'content-type': 'application/json',
-        });
+  const queries: any[] = [
+    {
+      withGrantedQuery: {
+        withGranted: true,
+      },
+    },
+  ];
 
-        const logBody = JSON.stringify({
-          query: {
-            limit: 100,
-            asc: true,
-          },
-          queries: [
-            {
-              projectIdQuery: {
-                projectId: process.env.PROJECT_ID,
-              },
-            },
-            {
-              withGrantedQuery: {
-                withGranted: true,
-              },
-            },
-          ],
-        });
-
-        console.log(
-          new Date().toLocaleString(),
-          '\n',
-          `call to ${process.env.ZITADEL_API}/management/v1/users/grants/_search to load ZITADEL user grants.`,
-          '\n',
-          `header: ${logHeaders}, body: ${logBody}`,
-        );
-
-        return fetch(request, {
-          headers: {
-            authorization: `Bearer ${token}`,
-            'x-zitadel-org': process.env.ORG_ID,
-            'content-type': 'application/json',
-          },
-          method: 'POST',
-          body: JSON.stringify({
-            query: {
-              limit: 100,
-              asc: true,
-            },
-            queries: [
-              {
-                projectIdQuery: {
-                  projectId: process.env.PROJECT_ID,
-                },
-              },
-              {
-                withGrantedQuery: {
-                  withGranted: true,
-                },
-              },
-            ],
-          }),
-        })
-          .then(handleFetchErrors)
-          .then((resp) => {
-            return resp.json();
-          })
-          .then((resp) => {
-            const grants = resp.result ? resp.result.filter((grant) => grant.orgId === orgId) : [];
-            const newResp = {
-              ...resp,
-              result: grants,
-            };
-            return newResp;
-          });
-      } else {
-        throw new Error('not allowed');
-      }
-    })
-
-    .catch((error) => {
-      throw new Error('not allowed');
+  try {
+    const response = await fetch(request, {
+      headers: {
+        authorization: `Bearer ${token}`,
+        'x-zitadel-org': targetOrgId,
+        'content-type': 'application/json',
+      },
+      method: 'POST',
+      body: JSON.stringify({
+        query: {
+          limit: limit || 1000, // Increase limit to get more results
+          offset: offset || 0,
+          asc: true,
+        },
+        queries: queries,
+      }),
     });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error(`ZITADEL API error (${response.status}):`, errorText);
+      throw new Error(`ZITADEL API error: ${response.status} ${errorText}`);
+    }
+
+    const resp = await response.json();
+    return {
+      result: resp.result ?? [],
+      totalResult: resp.details?.totalResult || 0
+    };
+  } catch (error) {
+    console.error('Error in getUserGrants:', error);
+    // Always return the expected format even on error
+    return {
+      result: [],
+      totalResult: 0,
+      error: error.message
+    };
+  }
 }
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const session = await getServerSession(req, res, authOptions);
-
   if (!session?.accessToken) {
     return res.status(401).end();
   }
 
   if (req.method === 'GET') {
-    const orgId = req.headers.orgid as string;
-
-    return getUserGrants(orgId, session.accessToken, 'admin')
-      .then((resp) => {
-        res.status(200).json(resp);
-      })
-      .catch((error) => {
-        console.error('got an error', error);
-        res.status(500).json(error);
+    const { orgId, limit, offset } = req.query;
+    const targetOrgId = Array.isArray(orgId) ? orgId[0] : orgId;
+    const limitNum = limit ? parseInt(Array.isArray(limit) ? limit[0] : limit, 10) : undefined;
+    const offsetNum = offset ? parseInt(Array.isArray(offset) ? offset[0] : offset, 10) : undefined;
+    
+    try {
+      const resp = await getUserGrants(session.accessToken, targetOrgId, limitNum, offsetNum);
+      return res.status(200).json(resp);
+    } catch (error) {
+      console.error('Error fetching user grants:', error);
+      // Return a proper error response with the expected format
+      return res.status(500).json({
+        result: [],
+        totalResult: 0,
+        error: error.message || 'Failed to fetch user grants'
       });
+    }
   }
+  
+  return res.status(405).json({ error: 'Method not allowed' });
 };
 
 export default handler;

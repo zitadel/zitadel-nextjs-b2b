@@ -1,7 +1,8 @@
-import { signIn, useSession } from 'next-auth/react';
+import { signIn, signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { Router, withRouter } from 'next/router';
 import React, { Fragment, useEffect, useState } from 'react';
+import { PencilIcon, PlusIcon, LogoutIcon } from '@heroicons/react/outline';
 
 import AuthCheck from './AuthCheck';
 import OrgContext from './OrgContext';
@@ -48,13 +49,13 @@ class Nav extends React.Component<Props, State> {
   render() {
     return (
       <nav className="font-normal z-50 transition-all duration-300 ease-in-out fixed top-0 inset-x-0 h-14 bg-lnav dark:bg-dnav shadow-lnav backdrop-nav dark:shadow-dnav">
-        <div className="h-full max-w-7xl mx-auto flex items-center px-6">
-          <div className="min-w-40 relative">
-            <Link href="/" className="h-10 block">
-              <img height={40} width={147.5} className="navimgd" src="/zitadel-logo-light.svg" alt="ZITADEL logo dark" />
+        <div className="h-full max-w-7xl mx-auto flex items-center px-4 sm:px-6">
+          <div className="min-w-32 sm:min-w-40 relative">
+            <Link href="/" className="h-8 sm:h-10 block">
+              <img height={40} width={147.5} className="navimgd h-8 sm:h-10 w-auto" src="/zitadel-logo-light.svg" alt="ZITADEL logo dark" />
             </Link>
 
-            <span className="text-xl font-bold absolute -bottom-1 -right-6 text-zitadelaccent-500">B2B</span>
+            <span className="text-lg sm:text-xl font-bold absolute -bottom-1 -right-4 sm:-right-6 text-zitadelaccent-500">B2B</span>
           </div>
 
           <AuthCheck fallback={<div></div>}>
@@ -89,9 +90,9 @@ class Nav extends React.Component<Props, State> {
             <li className="text-gray-500 dark:text-gray-200">
               <button
                 onClick={() => this.triggerMenu()}
-                className="flex items-center box-border px-4 outline-none focus:outline-none"
+                className="flex items-center box-border px-2 sm:px-4 outline-none focus:outline-none"
               >
-                <i className="text-lg las la-bars"></i>
+                <i className="text-lg sm:text-xl las la-bars"></i>
               </button>
               <div
                 className={`${
@@ -142,32 +143,107 @@ function NavButtons() {
 }
 
 function MobileList() {
+  const { data: session } = useSession();
+  
+  const logout = async () => {
+    await signOut({ callbackUrl: '/' });
+    const url =
+      `${process.env.PUBLIC_NEXT_ZITADEL_API}/oidc/v1/end_session?` +
+      new URLSearchParams({
+        post_logout_redirect_uri: window.location.origin,
+        client_id: process.env.ZITADEL_CLIENT_ID || ''
+      });
+    
+    window.location.href = url;
+  };
+
+  function login() {
+    signIn(
+      'zitadel',
+      {
+        callbackUrl: '/',
+      },
+      { prompt: 'select_account' },
+    );
+  }
+
   return (
-    <div className="overflow-y-scroll max-h-screenmnav m-2 py-2  bg-white dark:bg-zitadelblue-400 shadow-xl dark:text-white rounded-xl relative">
+    <div className="overflow-y-scroll max-h-screenmnav m-2 py-2 bg-white dark:bg-zitadelblue-400 shadow-xl dark:text-white rounded-xl relative">
       <Link
         href="/"
-        className="px-4 py-4 flex items-center hover:text-purple-700 dark:hover:text-zitadelaccent-400 justify-center"
+        className="px-4 py-3 sm:py-4 flex items-center hover:text-purple-700 dark:hover:text-zitadelaccent-400 justify-center text-sm sm:text-base"
       >
         Home
       </Link>
-      <Link
-        href="/aboutus"
-        className="px-4 py-4 flex items-center hover:text-purple-700 dark:hover:text-zitadelaccent-400 justify-center"
+      <a
+        href={`${process.env.PUBLIC_NEXT_ZITADEL_API}/ui/console`}
+        target="_blank"
+        rel="noreferrer"
+        className="px-4 py-3 sm:py-4 flex items-center hover:text-purple-700 dark:hover:text-zitadelaccent-400 justify-center text-sm sm:text-base"
       >
-        About Us
-      </Link>
-      <Link
-        href="/contact"
-        className="px-4 py-4 flex items-center hover:text-purple-700 dark:hover:text-zitadelaccent-400 justify-center"
-      >
-        Contact
-      </Link>
-      <Link
-        href="/jobs"
-        className="px-4 py-4 flex items-center hover:text-purple-700 dark:hover:text-zitadelaccent-400 justify-center"
-      >
-        Jobs
-      </Link>
+        <span>Console</span>
+        <i className="text-lg sm:text-xl h-4 sm:h-5 -mt-1 sm:-mt-2 ml-2 las la-external-link-alt"></i>
+      </a>
+
+      {session ? (
+        <>
+          {/* User Profile Section */}
+          <div className="border-t border-gray-200 dark:border-gray-600 my-2 pt-3">
+            <div className="px-4 py-2 text-center">
+              <p className="text-sm font-medium truncate">{session.user?.name}</p>
+              <p className="text-xs text-gray-500 dark:text-gray-300 truncate">{session.user?.email}</p>
+            </div>
+            
+            {/* Profile Actions */}
+            <a
+              href={`${process.env.PUBLIC_NEXT_ZITADEL_API}/ui/console/users/me${
+                session.user?.loginName ? `?login_hint=${encodeURIComponent(session.user.loginName)}` : ''
+              }`}
+              target="_blank"
+              rel="noreferrer"
+              className="px-4 py-3 flex items-center hover:text-purple-700 dark:hover:text-zitadelaccent-400 justify-center text-sm"
+            >
+              <PencilIcon className="w-4 h-4 mr-2" />
+              Edit Profile
+            </a>
+            
+            <button
+              onClick={() =>
+                signIn(
+                  'zitadel',
+                  {
+                    callbackUrl: '/',
+                  },
+                  {
+                    prompt: 'select_account',
+                  },
+                )
+              }
+              className="w-full px-4 py-3 flex items-center hover:text-purple-700 dark:hover:text-zitadelaccent-400 justify-center text-sm"
+            >
+              <PlusIcon className="w-4 h-4 mr-2" />
+              Add other user
+            </button>
+            
+            <button
+              onClick={logout}
+              className="w-full px-4 py-3 flex items-center hover:text-red-500 justify-center text-sm border-t border-gray-200 dark:border-gray-600 mt-2 pt-3"
+            >
+              <LogoutIcon className="w-4 h-4 mr-2" />
+              Logout all users
+            </button>
+          </div>
+        </>
+      ) : (
+        <div className="border-t border-gray-200 dark:border-gray-600 my-2 pt-3">
+          <button
+            onClick={login}
+            className="w-full px-4 py-3 mx-2 mb-2 shadow rounded-md text-sm bg-gray-100 dark:bg-zitadelblue-300 hover:bg-gray-200 dark:hover:bg-zitadelblue-200 font-normal"
+          >
+            Login
+          </button>
+        </div>
+      )}
     </div>
   );
 }

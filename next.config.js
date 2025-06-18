@@ -7,7 +7,6 @@ module.exports = {
     PUBLIC_NEXT_ZITADEL_API: process.env.PUBLIC_NEXT_ZITADEL_API,
     ZITADEL_API: process.env.ZITADEL_API,
     ORG_ID: process.env.ORG_ID,
-    PROJECTID: process.env.PROJECT_ID,
     ZITADEL_API: process.env.ZITADEL_API,
   },
 };

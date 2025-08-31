@@ -9,4 +9,5 @@ module.exports = {
     ORG_ID: process.env.ORG_ID,
     ZITADEL_API: process.env.ZITADEL_API,
   },
+  output: 'standalone'
 };

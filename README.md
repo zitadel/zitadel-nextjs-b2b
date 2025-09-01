@@ -73,12 +73,13 @@ Open the Console (`https://{YourDomain}.zitadel.cloud/ui/console/projects`) and 
 
 Then on the project detail page click on new application and enter a name for this app.
 Let's call this one `portal-web`.
-Select `Web`, continue, `Code`, then enter `http://localhost:3000/api/auth/callback/zitadel` for the redirect, and `http://localhost:3000` for the post redirect. Then press on `create`.
+Select `Web`, continue, `Code`, then enter `http://localhost:3000/api/auth/callback/zitadel` for the redirect, and `http://localhost:3000` for the post redirect. 
+Enable `Development Mode` to allow a redirect to localhost.
+Then press on `create`.
 
 Copy the "Client Secret" from the newly created `portal-web` application as you will need this in your environment configuration file later.
 
 Click on the application `portal-web`.
-On the application detail page click on the section under redirect settings and enable `Development Mode`. This will allow you application to work on `localhost:3000`.
 To read the user data and roles from ID Token, go to the section Token Settings and make sure both checkboxes, `User roles inside ID Token` and `User Info inside ID Token` are enabled.
 Make sure to save your changes.
 
@@ -128,11 +129,11 @@ On the detail page of that user, navigate to "Personal Access Tokens" and add a 
 Copy the generated Token as you will need this in your environment configuration file later.
 
 Go back to the `Portal` project and add the Service User as Manager (top right).
-Make sure to select `Project Owner Viewer` as the management role.
+Make sure to select `Project Owner Viewer Global` as the management role.
 
 To show granted projects, still in the `Demo-Vendor` organization, add the Service User as `Org Project Permission Editor` Manager.
 
-To manage user grants and invite new users, go to the `Demo-Customer` organization and add the Service User as `Org User Manager` Manager.
+To manage user grants and invite new users, go to the `Demo-Customer` organization and add the Service User as `Org User Manager` Manager. Click on "If you want to grant a user of an other organization click here" to be able to search the user across organizations.
 
 ## Step 3: Configuration
 

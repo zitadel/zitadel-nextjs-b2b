@@ -9,8 +9,8 @@ export default function RolesCheck({
 }: {
   roles: string[];
   requiredRole: string;
-  children: JSX.Element;
-  fallback?: JSX.Element;
+  children: React.JSX.Element;
+  fallback?: React.JSX.Element;
 }) {
   const { data: session } = useSession();
 
